@@ -18,6 +18,8 @@ import {
   notifySuccessPromise,
 } from "./utils/Toast";
 import { asyncCurrentUser } from "./store/actions/appActions";
+import Wishlist from "./pages/Wishlist";
+import CarDetail from "./pages/CarDetail";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,7 +51,7 @@ const App = () => {
 
     if (userType == "Admin") navigate("/admin");
     if (userType == "Dealer") navigate("/dealer");
-    if (userType == "Buyer") navigate("/buyer");
+    if (userType == "Buyer") navigate("/deals");
     if (userType == null) navigate("/");
   }, [userType]);
 
@@ -63,6 +65,8 @@ const App = () => {
         <Route path="/sign-in" element={<SignInBuyer />} />
         <Route path="/sign-up" element={<SignUpBuyer />} />
         <Route path="/deals" element={<Deals />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/car-detail" element={<CarDetail />} />
         <Route path="/dealer/*" element={<Dealer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

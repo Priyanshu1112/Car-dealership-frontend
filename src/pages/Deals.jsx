@@ -24,13 +24,13 @@ const Deals = () => {
 
   return (
     <div className="relative">
-      <div className=" container bg-gray-100 px-10">
+      <div className=" container px-10">
         {/* <h1 className=" text-[38px] font-medium text-black text-center">
         Most popular cars deals
       </h1> */}
 
         <div className="flex items-start justify-between gap-5">
-          <div className=" bg-white w-[20%] h-screen flex flex-col px-6 py-4 mt-4 rounded-2xl">
+          <div className=" sticky top-0 left-0 bg-white shadow-md w-[20%]  min-h-fit flex flex-col px-6 py-4 mt-4 rounded-2xl mb-20">
             {/* TYPE */}
             <div className="flex flex-col">
               <span className="text-black  font-semibold text-xl mb-3">
@@ -83,7 +83,7 @@ const Deals = () => {
 
           <div className="">
             <div className="grid grid-cols-3 gap-7 mt-4">
-              {[0, 1, 2, 3].map((e, index) => (
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((e, index) => (
                 <Card key={index} />
               ))}
             </div>
