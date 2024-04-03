@@ -2,12 +2,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { NavItems } from "../../constants";
 import { useEffect, useRef, useState } from "react";
+<<<<<<< HEAD
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "/assets/image/Avatar.png";
 import { CarTaxiFront, LogOut } from "lucide-react";
 import { asyncLogOut } from "../store/actions/appActions";
 import { Tooltip } from "@mui/material";
 import { notifyError, notifySuccess } from "../utils/Toast";
+=======
+import { useSelector } from "react-redux";
+import DarkMode from "/assets/icon/Inactive_darkmode.svg";
+import Avatar from "/assets/image/Avatar.png";
+import { Heart } from "lucide-react";
+>>>>>>> 47614de6c4bec76bae4c9400e9352eb71e24962b
 
 const Navbar = () => {
   const navRef = useRef(null);
@@ -63,11 +70,18 @@ const Navbar = () => {
     };
   }, []);
 
+  const { isAuthenticated, userType } = useSelector((state) => state.app);
+  console.log(isAuthenticated);
+
   return (
     <div
+<<<<<<< HEAD
       className={`${
         ["/", "/buyer"].includes(pathname) ? "fixed" : "sticky"
       } top-0 left-0 w-full z-[100]`}
+=======
+      className=" sticky top-0 left-0 w-full z-[100]"
+>>>>>>> 47614de6c4bec76bae4c9400e9352eb71e24962b
       style={{
         backgroundColor: isScrolled ? "white" : "",
         boxShadow: isScrolled ? "0px 2px 0px rgba(0, 0, 0, .2)" : "",
@@ -76,9 +90,13 @@ const Navbar = () => {
     >
       <nav
         ref={navRef}
+<<<<<<< HEAD
         className={`container 2xl:relative ${
           isAuthenticated ? "py-5" : "py-10"
         } flex items-center justify-between px-3 dark:bg-gray-500`}
+=======
+        className="container 2xl:relative  py-5 flex items-center justify-between px-3 dark:bg-gray-500"
+>>>>>>> 47614de6c4bec76bae4c9400e9352eb71e24962b
       >
         <Link to="/">
           <div className=" flex items-center gap-3">

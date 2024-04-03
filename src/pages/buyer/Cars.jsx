@@ -76,7 +76,7 @@ const Cars = () => {
         Most popular cars cars
       </h1> */}
         <div className="flex items-start justify-between gap-5">
-          <div className=" bg-white w-[20%] h-screen flex flex-col px-6 py-4 mt-4 rounded-2xl">
+          <div className=" sticky top-0 left-0 bg-white shadow-md w-[20%]  min-h-fit flex flex-col px-6 py-4 mt-4 rounded-2xl mb-20">
             {/* TYPE */}
             <div className="flex flex-col">
               <span className="text-black  font-semibold text-xl mb-3">
