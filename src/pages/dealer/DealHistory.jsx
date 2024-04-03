@@ -1,23 +1,33 @@
-const people = [
-  {
-    name: "John Doe",
-    carName: "Verna",
-    cartype: "sedan",
-    email: "john@devui.com",
-    image:
-      "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80",
-  },
-  {
-    name: "Jane Doe",
-    carName: "Verna",
-    cartype: "sedan",
-    email: "john@devui.com",
-    image:
-      "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80",
-  },
-];
+import Pagination from "../../components/Pagination";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { asyncGetDealerDeals } from "../../store/actions/dealActions";
 
 const DealHistory = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, myDeals } = useSelector((state) => state.app);
+
+  const { pathname, search } = useLocation();
+
+  const query = new URLSearchParams(search);
+
+  const [page, setPage] = useState(query.get("page") || 1);
+
+  useEffect(() => {
+    navigate(`${pathname}?page=${page ? page : 1}`);
+  }, [page]);
+
+  useEffect(() => {
+    dispatch(asyncGetDealerDeals(user?._id));
+  }, []);
+
+  useEffect(() => {
+    navigate(`${pathname}?page=${page ? page : 1}`);
+  }, []);
+
   return (
     <>
       <section className="w-full container py-4">
@@ -70,8 +80,8 @@ const DealHistory = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                      {people.map((val, index) => (
-                        <tr key={val.name}>
+                      {myDeals?.map((deal, index) => (
+                        <tr key={deal._id || index}>
                           <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
                             {index + 1}
                           </td>
@@ -80,34 +90,34 @@ const DealHistory = () => {
                               <div className="h-10 w-10 flex-shrink-0">
                                 <img
                                   className="h-10 w-10 rounded-full object-cover"
-                                  src={val.image}
-                                  alt=""
+                                  src={deal?.car_id?.image?.main?.url}
+                                  alt="image"
                                 />
                               </div>
                               <div className="ml-4">
                                 <div className="text-sm font-medium text-gray-900">
-                                  {val.name}
+                                  {deal?.buyer_id?.user_name}
                                 </div>
                                 <div className="text-sm font-medium text-gray-700">
-                                  {val.email}
+                                  {deal?.buyer_id?.email}
                                 </div>
                               </div>
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-12 py-4">
                             <div className="text-sm font-medium text-gray-900 ">
-                              {val.carName}
+                              {deal?.car_id?.name}
                             </div>
                             <div className="text-sm font-medium text-gray-700">
-                              {val.cartype}
+                              {deal?.car_id?.type}
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
-                            5, 00, 000
+                            ₹ {deal?.price.toLocaleString("en-In")}
                           </td>
                           <td className="whitespace-nowrap px-4 py-4">
                             <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                              Active
+                              Sold
                             </span>
                           </td>
                         </tr>
@@ -119,43 +129,8 @@ const DealHistory = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end pt-6">
-          <a
-            href="#"
-            className="mx-1 cursor-not-allowed text-sm font-semibold text-gray-900"
-          >
-            <span className="hidden lg:block">&larr; Previous</span>
-            <span className="block lg:hidden">&larr;</span>
-          </a>
-          <a
-            href="#"
-            className="mx-1 flex items-center rounded-md border border-gray-400 px-3 py-1 text-gray-900 hover:scale-105"
-          >
-            1
-          </a>
-          <a
-            href="#"
-            className="mx-1 flex items-center rounded-md border border-gray-400 px-3 py-1 text-gray-900 hover:scale-105"
-          >
-            2
-          </a>
-          <a
-            href="#"
-            className="mx-1 flex items-center rounded-md border border-gray-400 px-3 py-1 text-gray-900 hover:scale-105"
-          >
-            3
-          </a>
-          <a
-            href="#"
-            className="mx-1 flex items-center rounded-md border border-gray-400 px-3 py-1 text-gray-900 hover:scale-105"
-          >
-            4
-          </a>
-          <a href="#" className="mx-2 text-sm font-semibold text-gray-900">
-            <span className="hidden lg:block">Next &rarr;</span>
-            <span className="block lg:hidden">&rarr;</span>
-          </a>
-        </div>
+
+        <Pagination page={page} setPage={setPage} items={user?.deals.length} />
       </section>
     </>
   );

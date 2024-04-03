@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/formik/InputField";
@@ -11,23 +11,24 @@ import {
   notifySuccessPromise,
 } from "../../utils/Toast";
 
-const initialValues = {
-  email: "",
-  password: "",
-};
-
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
 const SignInBuyer = () => {
+  const initialValues = {
+    email: "",
+    password: "",
+  };
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (val) => {
     const id = notifyPendingPromise("Signing in buyer...");
     dispatch(asyncBuyerSignIn(val)).then((res) => {
       if (res == 200) {
+        navigate("/");
         notifySuccessPromise(id, "Buyer signed in successfully!");
       } else {
         console.log(res);
@@ -66,6 +67,7 @@ const SignInBuyer = () => {
                 values,
                 errors,
                 touched,
+                setValues,
               }) => (
                 <div className="space-y-5 mt-5">
                   <InputField
@@ -91,6 +93,18 @@ const SignInBuyer = () => {
                     touched={touched?.password}
                   />
                   <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValues({
+                          email: "buyer@gmail.com",
+                          password: "buyer123",
+                        });
+                      }}
+                      className="inline-flex mb-3 w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                    >
+                      Try Dummy
+                    </button>
                     <button
                       onClick={handleSubmit}
                       type="button"

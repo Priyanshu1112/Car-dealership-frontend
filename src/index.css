@@ -29,3 +29,14 @@ body {
 .rotate {
   animation: spin 1s linear infinite; /* Apply rotation animation */
 }
+
+#car-container,
+#message-container {
+  scrollbar-width: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

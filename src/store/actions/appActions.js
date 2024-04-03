@@ -6,7 +6,7 @@ import { addUser, removeUser } from "../reducers/appReducer";
 // ----------------------------Current-User------------------------------
 export const asyncCurrentUser = catchAsyncError(() => async (dispatch) => {
   const res = await axiosInstance.get("/current-user");
-  console.log(res);
+  // console.log(res);
   if (res.status == 200) {
     if (res.data.newAccessToken) {
       setAccessToken(res.data.newAccessToken);
@@ -67,3 +67,7 @@ export const asyncLogOut = () => (dispatch) => {
     console.log(err);
   }
 };
+
+// -----------------------------OTHER ASYNC FUNCTIONS------------------------------------
+
+// -----------------------------Dealer----------------------------------------

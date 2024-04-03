@@ -1,10 +1,48 @@
-import { useState } from "react";
-import { CarCapacity, CarTypes } from "../../constants";
-import Card from "../components/Card";
+import { useEffect, useState } from "react";
+import { CarCapacity, CarTypes } from "../../../constants";
+import Card from "../../components/Card";
+import { useLocation, useNavigate } from "react-router-dom";
+import { asyncGetAllCars } from "../../store/actions/carActions";
+import { useDispatch, useSelector } from "react-redux";
+import { notifyError } from "../../utils/Toast";
+import Pagination from "../../components/Pagination";
 
-const Deals = () => {
+const Cars = () => {
   const [type, setType] = useState(() => CarTypes.map(() => false));
   const [capacity, setCapacity] = useState(() => CarCapacity.map(() => false));
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { allCars } = useSelector((state) => state.app);
+
+  const { pathname, search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const [page, setPage] = useState(searchParams.get("page") || 1);
+
+  useEffect(() => {
+    const filteredTypes = CarTypes.filter((_, index) => type[index]);
+    const filteredCapacities = CarCapacity.filter(
+      (_, index) => capacity[index]
+    );
+
+    // console.log("Selected Types:", filteredTypes);
+    // console.log("Selected Capacities:", filteredCapacities);
+
+    let queryParams = `?page=${page}`;
+
+    if (filteredTypes.length > 0) {
+      queryParams += `&type=${filteredTypes.join(",")}`;
+    }
+
+    if (filteredCapacities.length > 0) {
+      queryParams += `&capacities=${filteredCapacities.join(",")}`;
+    }
+
+    navigate(pathname + queryParams);
+
+    dispatch(asyncGetAllCars(queryParams.slice(1)));
+  }, [type, capacity]);
 
   const handleTypeCheckbox = (index) => {
     setType((prevTypes) => {
@@ -22,13 +60,21 @@ const Deals = () => {
     });
   };
 
+  useEffect(() => {
+    navigate(`${pathname}?page=${page}`);
+
+    dispatch(asyncGetAllCars(page)).then((res) => {
+      if (res == 200) console.log("successfully fetched all cars");
+      else notifyError(res.message);
+    });
+  }, [page]);
+
   return (
     <div className="relative">
-      <div className=" container bg-gray-100 px-10">
+      <div className=" container bg-gray-100 px-10 pb-4">
         {/* <h1 className=" text-[38px] font-medium text-black text-center">
-        Most popular cars deals
+        Most popular cars cars
       </h1> */}
-
         <div className="flex items-start justify-between gap-5">
           <div className=" bg-white w-[20%] h-screen flex flex-col px-6 py-4 mt-4 rounded-2xl">
             {/* TYPE */}
@@ -45,6 +91,7 @@ const Deals = () => {
                   >
                     <input
                       type="checkbox"
+                      onChange={() => handleTypeCheckbox(index)}
                       checked={type[index]}
                       className="cursor-pointer"
                     />
@@ -67,6 +114,7 @@ const Deals = () => {
                   >
                     <input
                       type="checkbox"
+                      onChange={() => handleCapacityCheckbox(index)}
                       checked={capacity[index]}
                       className="cursor-pointer p-1"
                     />
@@ -81,17 +129,27 @@ const Deals = () => {
             </div>
           </div>
 
-          <div className="">
+          <div
+            id="car-container"
+            className=" overflow-y-scroll h-screen pb-5 no-scrollbar"
+          >
             <div className="grid grid-cols-3 gap-7 mt-4">
-              {[0, 1, 2, 3].map((e, index) => (
-                <Card key={index} />
-              ))}
+              {allCars?.map((car, index) => {
+                if (car.sold) return;
+                return <Card key={index} car={car} />;
+              })}
             </div>
           </div>
         </div>
+        <Pagination
+          page={page}
+          setPage={setPage}
+          items={allCars?.length}
+          showItems={20}
+        />
       </div>
     </div>
   );
 };
 
-export default Deals;
+export default Cars;

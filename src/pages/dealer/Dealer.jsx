@@ -4,14 +4,12 @@ import Bargains from "../../pages/dealer/Bargains";
 import DealHistory from "../../pages/dealer/DealHistory";
 import MyCars from "../../pages/dealer/MyCars";
 import DashboardLayout from "../../components/DashboardLayout";
-// import { LogOut } from "lucide-react";
-// import { asyncLogOut } from "../../store/actions/appActions";
-// import { useDispatch } from "react-redux";
+
 import AddCar from "./AddCar";
+import EditCar from "./EditCar";
+import CarDetail from "./CarDetailDealer";
 
 const Dealer = () => {
-  // const dispatch = useDispatch();
-
   return (
     <DashboardLayout>
       <div className="flex-1 ml-6">
@@ -32,6 +30,8 @@ const Dealer = () => {
           <Route path="/bargains" element={<Bargains />} />
           <Route path="/my-cars" element={<MyCars />} />
           <Route path="/add-car" element={<AddCar />} />
+          <Route path="/edit-car" element={<EditCar />} />
+          <Route path="/car-detail" element={<CarDetail />} />
         </Routes>
       </div>
     </DashboardLayout>

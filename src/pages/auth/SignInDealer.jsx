@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   notifyErrorPromise,
   notifyPendingPromise,
@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
 
 const SignInDealer = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (val) => {
     console.log(val);
@@ -32,7 +33,7 @@ const SignInDealer = () => {
     dispatch(asyncDealerSignIn(val)).then((res) => {
       if (res == 200) {
         notifySuccessPromise(id, "Dealer signed in successfully!");
-        // navigate("/dealer");
+        navigate("/dealer");
       } else {
         console.log(res);
         notifyErrorPromise(id, res.message);
@@ -80,6 +81,7 @@ const SignInDealer = () => {
                 values,
                 errors,
                 touched,
+                setValues,
               }) => (
                 <div className="space-y-5 mt-5">
                   <InputField
@@ -105,6 +107,18 @@ const SignInDealer = () => {
                     touched={touched?.password}
                   />
                   <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValues({
+                          email: "dealer@gmail.com",
+                          password: "dealer123",
+                        });
+                      }}
+                      className="inline-flex mb-3 w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                    >
+                      Try Dummy
+                    </button>
                     <button
                       onClick={handleSubmit}
                       type="button"

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/formik/InputField";
@@ -25,11 +25,13 @@ const validationSchema = Yup.object().shape({
 
 const SignUpDealer = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (val) => {
     const id = notifyPendingPromise("Registering dealer...");
     dispatch(asyncDealerSignUp(val)).then((res) => {
       if (res == 200) {
+        navigate("/dealer");
         notifySuccessPromise(id, "Dealer registered  successfully!");
       } else {
         console.log(res);

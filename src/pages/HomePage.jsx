@@ -14,10 +14,24 @@ import Quote_img2 from "/assets/image/quote_img2.png";
 import User_img from "/assets/image/user_img.png";
 import Card from "../components/Card";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncGetAllCars } from "../store/actions/carActions";
+import { notifyError } from "../utils/Toast";
 
 const HomePage = () => {
   const containerRef = useRef(null);
   const imageRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  const { isAuthenticated, allCars } = useSelector((state) => state.app);
+
+  useEffect(() => {
+    if (isAuthenticated)
+      dispatch(asyncGetAllCars()).then((res) => {
+        if (res != 200) notifyError(res.message);
+      });
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const updateContainerHeight = () => {
@@ -143,7 +157,7 @@ const HomePage = () => {
                       Best price guaranteed
                     </h1>
                     <p className="text-base text-[#6D6D6D] font-normal mt-1">
-                      Find a lower price? We’ll refund you 100% of the
+                      Find a lower price? We&apos;ll refund you 100% of the
                       difference.
                     </p>
                   </div>
@@ -155,18 +169,21 @@ const HomePage = () => {
 
         <div className=" container mt-20">
           <h1 className=" text-[38px] font-medium text-black text-center">
-            Most popular cars deals
+            All Cars
           </h1>
 
-          <div className="grid grid-cols-4 gap-7 mt-4">
-            {[0, 1, 2, 3].map((e, index) => (
-              <Card key={index} />
-            ))}
+          <div className="grid grid-cols-4 gap-7 mt-4 px-1">
+            {allCars
+              ?.filter((car) => !car.sold) // Filter out sold cars
+              .slice(0, 4) // Take the first 10 cars
+              .map((car, index) => (
+                <Card key={index} car={car} />
+              ))}
           </div>
 
           <div className=" flex items-center justify-center mt-12">
             <Link
-              to={`/deals`}
+              to={`/cars`}
               className=" border-[1px] border-[#E0E0E0] w-fit px-8 py-2 text-[#4E4E4E] rounded-lg mt-3"
             >
               Show all vehicles

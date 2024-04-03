@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 
-import DarkMode from "/assets/icon/Inactive_darkmode.svg";
 import Avatar from "/assets/image/Avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Badge } from "@mui/material";
+import { Bell } from "lucide-react";
 
 const Header = ({ heading }) => {
+  const navigate = useNavigate();
+  const { user, unreadChat } = useSelector((state) => state.app);
+
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-[28px] font-medium text-[#2B3674]">
-          Welcome Back, Krishna
+        <h1 className="text-[28px] font-medium text-[#2B3674] capitalize">
+          Welcome Back, {user?.user_name}
         </h1>
       </div>
-      <div className="flex gap-6 bg-white px-5 py-3 rounded-full">
-        <img src={DarkMode} alt="dark mode icon" />
-        <Link to={`/profile`}>
-          <img src={Avatar} alt="Avatar" className=" object-cover" />
+      <div className="flex items-center gap-6 bg-white px-5 py-3 rounded-full shadow-lg">
+        <Link to={"/dealer/bargains"}>
+          {" "}
+          <Badge badgeContent={unreadChat?.length} color="secondary">
+            <Bell size={26} onClick={() => navigate("/dealer/bargains")} />
+          </Badge>
         </Link>
+        <p>
+          <img src={Avatar} alt="Avatar" className=" object-cover" />
+        </p>
       </div>
     </div>
   );

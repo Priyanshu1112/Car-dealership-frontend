@@ -4,8 +4,8 @@ export const NavItems = [
     path: "/register-dealer",
   },
   {
-    title: "Deals",
-    path: "/deals",
+    title: "Cars",
+    path: "/cars",
   },
   //   {
   //     title: "How it work",
@@ -38,8 +38,8 @@ export const menuItems = [
     name: "My Cars",
     path: "my-cars",
   },
-  {
-    name: "Logout",
-    path: "",
-  },
+  // {
+  //   name: "Logout",
+  //   path: "",
+  // },
 ];
