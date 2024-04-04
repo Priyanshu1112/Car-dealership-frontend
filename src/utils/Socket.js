@@ -3,7 +3,9 @@ import { io } from "socket.io-client";
 var socket;
 
 export const initializeConnection = (user) => {
-  socket = io("http://localhost:3001", { autoConnect: false });
+  socket = io("https://car-dealership-backend.vercel.app", {
+    autoConnect: false,
+  });
   socket.auth = { id: user._id, name: user.user_name };
   socket.connect();
 
