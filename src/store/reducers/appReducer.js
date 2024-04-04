@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { produce } from "immer";
 
 const initialState = {
-  isAuthenticated: true,
-  userType: "Buyer",
+  isAuthenticated: false,
+  userType: null,
   user: null,
   allCars: null,
   myCars: null,

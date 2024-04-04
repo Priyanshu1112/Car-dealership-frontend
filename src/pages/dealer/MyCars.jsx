@@ -35,7 +35,7 @@ const MyCars = () => {
     } else {
       setCars(myCars);
     }
-  }, [activeTab]);
+  }, [activeTab, myCars]);
 
   useEffect(() => {
     if (user) {

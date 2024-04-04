@@ -55,7 +55,7 @@ const CarDetailDealer = () => {
 
     scrollToTop();
 
-    const getIndex = selectedCar.bargained.findIndex(
+    const getIndex = selectedCar?.bargained?.findIndex(
       (bargain) => bargain.id === user._id
     );
 

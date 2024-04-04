@@ -316,9 +316,9 @@ const ChatBuyer = () => {
                           >
                             <p>
                               Dealer Offer : ₹{" "}
-                              {bargain.price.price?.toLocaleString("en-In")}
+                              {bargain?.price?.price?.toLocaleString("en-In")}
                             </p>
-                            {bargain.price.status == "Ongoing" ? (
+                            {bargain?.price?.status == "Ongoing" ? (
                               <div className="text-xs flex gap-2">
                                 {" "}
                                 <span

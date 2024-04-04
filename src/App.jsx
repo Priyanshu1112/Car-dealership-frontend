@@ -18,7 +18,6 @@ import {
   notifySuccessPromise,
 } from "./utils/Toast";
 import { asyncCurrentUser } from "./store/actions/appActions";
-<<<<<<< HEAD
 import { disconnect, getSocket, initializeConnection } from "./utils/Socket";
 import Cars from "./pages/buyer/Cars";
 import CarDetail from "./pages/buyer/CarDetails";
@@ -36,10 +35,7 @@ import IsAuthenticated from "./middleware/IsAuthenticated";
 import { asyncGetAllCars } from "./store/actions/carActions";
 import MyCars from "./pages/buyer/MyCars";
 import CarDetailDealer from "./pages/dealer/CarDetailDealer";
-=======
-import Wishlist from "./pages/Wishlist";
-import CarDetail from "./pages/CarDetail";
->>>>>>> 47614de6c4bec76bae4c9400e9352eb71e24962b
+// import Wishlist from "./pages/Wishlist";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -111,10 +107,6 @@ const App = () => {
       id = notifyPendingPromise("Fetching Current User...");
       dispatch(asyncCurrentUser()).then((res) => {
         if (res.status == 200) {
-          if (userType == "Dealer") {
-            console.log(userType);
-            navigate("/dealer");
-          }
           notifySuccessPromise(id, `${res.userType} fetched successfully!`);
         } else {
           console.log(res.message);
@@ -124,18 +116,11 @@ const App = () => {
     }
   }, [userType]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (userType == "Dealer") {
       console.log(userType);
       navigate("/dealer");
     }
-=======
-    if (userType == "Admin") navigate("/admin");
-    if (userType == "Dealer") navigate("/dealer");
-    if (userType == "Buyer") navigate("/deals");
-    if (userType == null) navigate("/");
->>>>>>> 47614de6c4bec76bae4c9400e9352eb71e24962b
   }, [userType]);
 
   return (

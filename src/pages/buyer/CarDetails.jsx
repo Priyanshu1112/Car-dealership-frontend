@@ -356,7 +356,7 @@ const CarDetail = () => {
                       </div>
                     )}
 
-                    {selectedCar?.buyer_id != user?._id ? (
+                    {selectedCar?.buyer_id == user?._id ? (
                       <div className="flex gap-2">
                         {" "}
                         <button
