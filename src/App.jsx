@@ -49,28 +49,28 @@ const App = () => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      initializeConnection(user);
+      // initializeConnection(user);
 
-      socket.current = getSocket();
-      socket.current.on("receive-message", (data) => {
-        console.log("receive-message", data.message);
-        data.status == 200 && dispatch(receiveMessage(data.message));
-      });
+      // socket.current = getSocket();
+      // socket.current.on("receive-message", (data) => {
+      //   console.log("receive-message", data.message);
+      //   data.status == 200 && dispatch(receiveMessage(data.message));
+      // });
 
-      socket.current.on("receive-price", (data) => {
-        console.log("receive-price", data.bargain);
-        data.status == 200 && dispatch(receiveBargain(data.bargain));
-      });
+      // socket.current.on("receive-price", (data) => {
+      //   console.log("receive-price", data.bargain);
+      //   data.status == 200 && dispatch(receiveBargain(data.bargain));
+      // });
 
-      socket.current.on("price-reject", (data) => {
-        console.log("price-reject", data);
-        data.status == 200 && dispatch(rejectPrice(data.bargain));
-      });
+      // socket.current.on("price-reject", (data) => {
+      //   console.log("price-reject", data);
+      //   data.status == 200 && dispatch(rejectPrice(data.bargain));
+      // });
 
-      socket.current.on("price-accept", (data) => {
-        console.log("price-accept", data);
-        data.status == 200 && dispatch(acceptPrice(data.bargain));
-      });
+      // socket.current.on("price-accept", (data) => {
+      //   console.log("price-accept", data);
+      //   data.status == 200 && dispatch(acceptPrice(data.bargain));
+      // });
     } else {
       disconnect();
       navigate("/");
