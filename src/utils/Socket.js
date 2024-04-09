@@ -1,9 +1,9 @@
 import { io } from "socket.io-client";
 
 var socket;
-
+// https://car-dealership-backend.onrender.com/
 export const initializeConnection = (user) => {
-  socket = io("https://car-dealership-backend.vercel.app", {
+  socket = io("https://car-dealership-backend.onrender.com/", {
     autoConnect: false,
   });
   socket.auth = { id: user._id, name: user.user_name };
