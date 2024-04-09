@@ -3,7 +3,8 @@ import { getAccessToken, getRefreshToken, getUserType } from "./Token";
 
 const axiosInstance = axios.create({
   // baseURL: "http://localhost:3001/",
-  baseURL: "https://car-dealership-backend.vercel.app/",
+  // baseURL: "https://car-dealership-backend.vercel.app/",
+  baseURL: "https://car-dealership-backend.onrender.com/",
 });
 
 axiosInstance.interceptors.request.use(

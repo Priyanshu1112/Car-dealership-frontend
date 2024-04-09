@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { asyncGetDealerDeals } from "../../store/actions/dealActions";
+import { LoaderCircle } from "lucide-react";
 
 const DealHistory = () => {
   const navigate = useNavigate();
@@ -80,48 +81,58 @@ const DealHistory = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                      {myDeals?.map((deal, index) => (
-                        <tr key={deal._id || index}>
-                          <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
-                            {index + 1}
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-4">
-                            <div className="flex items-center">
-                              <div className="h-10 w-10 flex-shrink-0">
-                                <img
-                                  className="h-10 w-10 rounded-full object-cover"
-                                  src={deal?.car_id?.image?.main?.url}
-                                  alt="image"
-                                />
-                              </div>
-                              <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">
-                                  {deal?.buyer_id?.user_name}
+                      {myDeals ? (
+                        myDeals?.map((deal, index) => (
+                          <tr key={deal._id || index}>
+                            <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
+                              {index + 1}
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-4">
+                              <div className="flex items-center">
+                                <div className="h-10 w-10 flex-shrink-0">
+                                  <img
+                                    className="h-10 w-10 rounded-full object-cover"
+                                    src={deal?.car_id?.image?.main?.url}
+                                    alt="image"
+                                  />
                                 </div>
-                                <div className="text-sm font-medium text-gray-700">
-                                  {deal?.buyer_id?.email}
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {deal?.buyer_id?.user_name}
+                                  </div>
+                                  <div className="text-sm font-medium text-gray-700">
+                                    {deal?.buyer_id?.email}
+                                  </div>
                                 </div>
                               </div>
+                            </td>
+                            <td className="whitespace-nowrap px-12 py-4">
+                              <div className="text-sm font-medium text-gray-900 ">
+                                {deal?.car_id?.name}
+                              </div>
+                              <div className="text-sm font-medium text-gray-700">
+                                {deal?.car_id?.type}
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
+                              ₹ {deal?.price.toLocaleString("en-In")}
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-4">
+                              <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                                Sold
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5" className="w-full p-4">
+                            <div className="flex justify-center items-center">
+                              <LoaderCircle className="rotate" />
                             </div>
-                          </td>
-                          <td className="whitespace-nowrap px-12 py-4">
-                            <div className="text-sm font-medium text-gray-900 ">
-                              {deal?.car_id?.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-700">
-                              {deal?.car_id?.type}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
-                            ₹ {deal?.price.toLocaleString("en-In")}
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-4">
-                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                              Sold
-                            </span>
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Message from "/assets/icon/message_icon.svg";
 import Phone from "/assets/icon/phone_icon.svg";
 import { menuItems } from "../../constants";
 import Logo from "../components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { asyncLogOut } from "../store/actions/appActions";
 import { useDispatch } from "react-redux";
 import { LogOut } from "lucide-react";
@@ -18,6 +18,14 @@ const DashboardLayout = ({ children }) => {
   const [active, setActive] = useState("deal-history");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    pathname.includes('deal-history') && setActive('deal-history');
+    pathname.includes('bargains') && setActive('bargains');
+    pathname.includes('my-cars') && setActive('my-cars');
+  }, [pathname]);
 
   return (
     <div className="w-full min-h-screen bg-gray-50 px-10">

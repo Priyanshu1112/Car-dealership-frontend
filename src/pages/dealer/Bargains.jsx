@@ -72,7 +72,7 @@ const Bargains = () => {
     };
 
     sendPrice(data);
-    getSocket().on("price-sent", (res) => {
+    getSocket()?.on("price-sent", (res) => {
       if (res.status == 200) {
         dispatch(addPrice(res.bargain));
         priceInput.value = "";
@@ -159,7 +159,7 @@ const Bargains = () => {
             >
               <div className="h-[3vmax]  w-[3vmax] rounded-full overflow-hidden bg-white border border-red-400">
                 <img
-                  src={selectedChat?.car_id.image.main.url}
+                  src={selectedChat?.car_id?.image?.main?.url}
                   alt="car_img"
                   className="h-full w-full object-contain rounded-md"
                 />
