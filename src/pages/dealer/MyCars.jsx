@@ -26,6 +26,10 @@ const MyCars = () => {
   const [page, setPage] = useState(searchParams.get("page") || 1);
 
   useEffect(() => {
+    document.title = "My-Cars";
+  }, []);
+
+  useEffect(() => {
     if (activeTab == "ActiveCars") {
       setCars(myCars?.filter((car) => !car.sold));
     } else if (activeTab == "Ongoing") {

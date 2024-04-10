@@ -1,8 +1,13 @@
 import { useSelector } from "react-redux";
 import Card from "../../components/Card";
+import { useEffect } from "react";
 
 const WatchList = () => {
   const { allCars, watchList } = useSelector((state) => state.app);
+
+  useEffect(() => {
+    document.title = "Watch List";
+  }, []);
 
   return (
     <div className="relative">

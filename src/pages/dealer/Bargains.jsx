@@ -25,6 +25,10 @@ const Bargains = () => {
   const [chat, setChat] = useState("bargain");
 
   useEffect(() => {
+    document.title = "Bargains";
+  }, []);
+
+  useEffect(() => {
     // Scroll to the bottom of the message container
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =

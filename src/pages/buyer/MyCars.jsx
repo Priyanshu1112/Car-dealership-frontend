@@ -7,6 +7,10 @@ const MyCars = () => {
   const [myCars, setMyCars] = useState([]);
 
   useEffect(() => {
+    document.title = "My Cars";
+  }, []);
+
+  useEffect(() => {
     let cars = [];
     allCars?.map((car) => {
       if (car.sold && user?._id == car?.buyer_id) cars.push(car);

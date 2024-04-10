@@ -92,7 +92,7 @@ const CarDetail = () => {
       chat_name_dealer: user.user_name,
     };
     const index = user.chat.findIndex(
-      (chat) => chat.car_id._id == selectedCar._id
+      (chat) => chat?.car_id?._id == selectedCar?._id
     );
 
     console.log({ index });
@@ -123,9 +123,12 @@ const CarDetail = () => {
       image: selectedCar?.image?.main?.url,
       order_id: res.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
+        const id = notifyPendingPromise("Buying car...");
         dispatch(asyncVerifyPayment(response, selectedCar?._id)).then((res) => {
-          if (res == 200) navigate("/buyer/my-cars");
-          else notifyError(res.message);
+          if (res == 200) {
+            notifySuccessPromise(id, "Car bought successfully!");
+            navigate("/buyer/my-cars");
+          } else notifyError(res.message);
         });
         console.log({ response });
       },

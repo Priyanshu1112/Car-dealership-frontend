@@ -286,13 +286,11 @@ export const appReducer = createSlice({
         );
 
         if (carIndex != -1) {
-          draftState.allCars[index]?.bargained?.length
-            ? draftState.allCars[index].bargained.push([
-                {
-                  id: action.payload.buyer_id,
-                  price: action.payload.price.price,
-                },
-              ])
+          draftState.allCars[index]?.bargained?.length != 0
+            ? draftState.allCars[index].bargained.push({
+                id: action.payload.buyer_id,
+                price: action.payload.price.price,
+              })
             : (draftState.allCars[index].bargained = [
                 {
                   id: action.payload.buyer_id,

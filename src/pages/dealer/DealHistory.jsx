@@ -18,6 +18,10 @@ const DealHistory = () => {
   const [page, setPage] = useState(query.get("page") || 1);
 
   useEffect(() => {
+    document.title = "Deal-History";
+  }, []);
+
+  useEffect(() => {
     navigate(`${pathname}?page=${page ? page : 1}`);
   }, [page]);
 

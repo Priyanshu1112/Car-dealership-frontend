@@ -27,6 +27,10 @@ const HomePage = () => {
   const { isAuthenticated, allCars } = useSelector((state) => state.app);
 
   useEffect(() => {
+    document.title = "Home Page";
+  }, []);
+
+  useEffect(() => {
     if (isAuthenticated)
       dispatch(asyncGetAllCars()).then((res) => {
         if (res != 200) notifyError(res.message);

@@ -10,6 +10,7 @@ import {
   notifyPendingPromise,
   notifySuccessPromise,
 } from "../../utils/Toast";
+import { useEffect } from "react";
 
 const initialValues = {
   email: "",
@@ -26,6 +27,10 @@ const validationSchema = Yup.object().shape({
 const SignUpDealer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Sign-Up-Dealer";
+  }, []);
 
   const handleSubmit = (val) => {
     const id = notifyPendingPromise("Registering dealer...");

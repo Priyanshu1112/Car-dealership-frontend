@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import InputField from "../../components/formik/InputField";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../config/firebase-cofig";
+import { useEffect } from "react";
 
 const initialValues = {
   email: "",
@@ -26,6 +27,10 @@ const validationSchema = Yup.object().shape({
 const SignInDealer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Sign-In-Dealer";
+  }, []);
 
   const handleSubmit = (val) => {
     console.log(val);

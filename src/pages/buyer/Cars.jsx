@@ -21,6 +21,10 @@ const Cars = () => {
   const [page, setPage] = useState(searchParams.get("page") || 1);
 
   useEffect(() => {
+    document.title = "Cars";
+  }, []);
+
+  useEffect(() => {
     const filteredTypes = CarTypes.filter((_, index) => type[index]);
     const filteredCapacities = CarCapacity.filter(
       (_, index) => capacity[index]
