@@ -123,7 +123,7 @@ const CarDetail = () => {
       image: selectedCar?.image?.main?.url,
       order_id: res.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
-        const id = notifyPendingPromise("Buying car...");
+        const id = notifyPendingPromise("Redirecting...");
         dispatch(asyncVerifyPayment(response, selectedCar?._id)).then((res) => {
           if (res == 200) {
             notifySuccessPromise(id, "Car bought successfully!");
