@@ -13,6 +13,7 @@ import {
 import { getSocket, sendMessage, sendPrice } from "../utils/Socket";
 import { notifyInfo } from "../utils/Toast";
 import { useNavigate } from "react-router-dom";
+import CarImage from "/assets/image/car_img1.png";
 
 const ChatBuyer = () => {
   const dispatch = useDispatch();
@@ -168,7 +169,7 @@ const ChatBuyer = () => {
               >
                 <div className="col-start-1 row-start-1  row-span-2 border bg-white border-red-500 rounded-md">
                   <img
-                    src={chat?.car_id?.image?.main?.url}
+                    src={chat?.car_id?.image.main.url ?? CarImage}
                     alt="car_img"
                     className="h-full w-full object-contain rounded-md"
                   />
@@ -214,7 +215,7 @@ const ChatBuyer = () => {
               >
                 <div className="h-[3vmax] w-[3vmax] rounded-full overflow-hidden bg-white border border-red-400">
                   <img
-                    src={selectedChat?.car_id.image.main.url}
+                    src={selectedChat?.car_id?.image?.main?.url ?? CarImage}
                     alt="car_img"
                     className="h-full w-full object-contain rounded-md"
                   />
@@ -281,6 +282,7 @@ const ChatBuyer = () => {
                   >
                     {!user?.cars?.includes(selectedChat?.car_id?._id) ? (
                       selectedChat?.bargain?.map((bargain, index) => {
+                        
                         if (bargain.sender == user?._id) {
                           return (
                             <div
