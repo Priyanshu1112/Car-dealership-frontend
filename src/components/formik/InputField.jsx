@@ -12,7 +12,7 @@ const InputField = ({
 }) => {
   return (
     <div>
-      <label htmlFor="" className="text-base font-medium text-gray-900">
+      <label htmlFor="" className="text-sm lg:text-base font-medium text-gray-900">
         {title}
       </label>
       <div className="mt-2">
@@ -22,7 +22,7 @@ const InputField = ({
               touched && errors
                 ? " border-red-300 placeholder:text-red-400"
                 : "border-gray-300 placeholder:text-gray-400"
-            }  bg-transparent px-3 py-2 text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`}
+            }  bg-transparent px-3 py-2 text-xs lg:text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`}
             name={name}
             value={value}
             onChange={handleChange}
@@ -41,7 +41,7 @@ const InputField = ({
               touched && errors
                 ? " border-red-300 placeholder:text-red-400"
                 : "border-gray-300 placeholder:text-gray-400"
-            }  bg-transparent px-3 py-2 text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`}
+            }  bg-transparent px-3 py-2 text-xs lg:text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`}
             type={type}
             placeholder={placeHolder}
             name={name}

@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { notifyError } from "../../utils/Toast";
 import { asyncGetDealerCars } from "../../store/actions/carActions";
 import Pagination from "../../components/Pagination";
+import Ribbon from "../../components/Ribbon";
 import { updateSelectedCar } from "../../store/reducers/appReducer";
 import DeleteCarDealerDialog from "../../components/DeleteCarDealerDialog";
 
@@ -131,29 +132,8 @@ const MyCars = () => {
                   className="flex flex-col sm:flex-row sm:justify-between px-6 py-5 hover:bg-[#E1E9FC60] transition-all cursor-pointer"
                 >
                   <div className="flex w-full space-x-2 sm:space-x-4 ">
-                    {/* <div className="h-20 w-20 flex items-center justify-center border rounded-lg bg-gray-100 overflow-hidden relative">
-                      <img
-                        className="h-full w-full flex-shrink-0 rounded object-contain outline-none dark:border-transparent sm:h-32 sm:w-32"
-                        src={car.image.main?.url || Car_img}
-                        alt={car.name}
-                      />
-                      {car?.bargain &&
-                        !car?.sold &&
-                        (activeTab == "AllCars" ||
-                          activeTab == "ActiveCars") && (
-                          <div className="absolute w-full h-full top-0 left-0 bg-[rgba(0,100,0,.3)] text-white flex items-center justify-center">
-                            Bargain
-                          </div>
-                        )}
-                      {car?.sold && activeTab == "AllCars" && (
-                        <div className="absolute w-full h-full top-0 left-0 bg-[rgba(150,0,0,.3)] text-white flex items-center justify-center">
-                          Sold
-                        </div>
-                      )}
-                    </div> */}
-
                     <div className=" relative overflow-hidden">
-                      {car?.bargain &&
+                      {/* {car?.bargain &&
                       !car?.sold &&
                       (activeTab == "AllCars" || activeTab == "ActiveCars") ? (
                         <div className=" absolute top-[10px] left-[-20px] bg-green-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
@@ -172,7 +152,7 @@ const MyCars = () => {
                         <div className=" absolute top-[10px] left-[-20px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
                           Sold
                         </div>
-                      )}
+                      )} */}
                       {/* <div className=" absolute top-[10px] left-[-15px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[8px] ">
                         sold
                       </div> */}
@@ -184,6 +164,11 @@ const MyCars = () => {
                           // height={100}
                           className="h-20 w-20 object-cover hover:scale-125 transition-all duration-300 md:h-24 md:w-24 lg:h-28 lg:w-28 xl:w-32"
                         />
+                        {car?.sold ? (
+                          <Ribbon tag="Sold" />
+                        ) : (
+                          car?.bargain && <Ribbon tag="Ongoing" />
+                        )}
                       </div>
                     </div>
 

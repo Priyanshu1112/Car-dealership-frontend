@@ -305,8 +305,24 @@ const ChatBuyer = () => {
                     id="car-container"
                     className="flex-1 flex flex-col gap-2  md:text-xs text-[2vmin] p-2"
                   >
-                    {!user?.cars?.includes(selectedChat?.car_id?._id) ? (
+                    {/* {!user?.cars?.includes(selectedChat?.car_id?._id) ? ( */}
+                    {!allCars?.find(
+                      (car) => car._id == selectedChat?.car_id?._id
+                    )?.buyer_id ? (
                       selectedChat?.bargain?.map((bargain, index) => {
+                        const car = allCars?.find(
+                          (car) => car._id == selectedChat?.car_id?._id
+                        );
+                        console.log({ car });
+                        if (car?.buyer_id && car?.buyer_id != user?._id)
+                          return (
+                            <p
+                              key={index}
+                              className="h-full w-full flex items-center justify-center text-base"
+                            >
+                              Car has been sold
+                            </p>
+                          );
                         if (bargain.sender == user?._id) {
                           return (
                             <div
@@ -396,9 +412,15 @@ const ChatBuyer = () => {
                           </div>
                         );
                       })
-                    ) : (
+                    ) : allCars?.find(
+                        (car) => car._id == selectedChat?.car_id?._id
+                      )?.buyer_id == user?._id ? (
                       <p className="h-full w-full flex items-center justify-center text-base">
                         Car has been bought
+                      </p>
+                    ) : (
+                      <p className="h-full w-full flex items-center justify-center text-base">
+                        Car has been sold
                       </p>
                     )}
                   </div>

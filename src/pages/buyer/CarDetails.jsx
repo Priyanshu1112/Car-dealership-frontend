@@ -28,6 +28,7 @@ import { getSocket } from "../../utils/Socket";
 import { addChat, updateSelectedChat } from "../../store/reducers/appReducer";
 import useRazorpay from "react-razorpay";
 import RatingAndReview from "../../components/RatingAndReview";
+import Ribbon from "../../components/Ribbon";
 import Rating from "@mui/material/Rating";
 
 const CarDetail = () => {
@@ -41,7 +42,7 @@ const CarDetail = () => {
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
-    if (id && msg.includes("successfully")) notifySuccessPromise(id, msg);
+    if (id && msg?.includes("successfully")) notifySuccessPromise(id, msg);
     else if (id && msg) notifyErrorPromise(id, msg);
   }, [id, msg]);
 
@@ -190,7 +191,7 @@ const CarDetail = () => {
             <div className="mb-9">
               <div className=" md:grid md:grid-cols-2 flex flex-col items-start gap-2">
                 <div className="">
-                  <div className="w-full flex flex-col md:flex-row gap-4">
+                  <div className="w-full flex flex-col md:flex-row-reverse gap-4">
                     <h2 className="md:text-[32px] md:hidden block text-xl font-semibold">
                       {selectedCar.name}({selectedCar.model})
                     </h2>
@@ -204,8 +205,15 @@ const CarDetail = () => {
                           src={images[activeImage]}
                           // width={650}
                           // height={590}
-                          className="rounded-lg object-cover h-full w-full"
+                          className="rounded-lg object-contain h-full w-full"
                         />
+                        {selectedCar?.buyer_id ? (
+                          selectedCar?.buyer_id == user?._id ? (
+                            <Ribbon tag="Bought" />
+                          ) : (
+                            <Ribbon tag="Sold" />
+                          )
+                        ) : null}
                       </div>
                     </div>
                     <div className="flex md:flex-col gap-2">
@@ -355,7 +363,10 @@ const CarDetail = () => {
                       </div>
                     )}
 
-                    {selectedCar?.buyer_id != user?._id ? (
+                    {/* {selectedCar?.buyer_id &&
+                      selectedCar?.buyer_id != user?._id &&
+                      "hey"} */}
+                    {!selectedCar?.buyer_id ? (
                       <div className="flex flex-row gap-2">
                         {" "}
                         <button
@@ -371,10 +382,12 @@ const CarDetail = () => {
                           Buy Now
                         </button>
                       </div>
-                    ) : (
+                    ) : selectedCar?.buyer_id == user?._id ? (
                       <p className="text-gray-700 text-lg mt-5">
-                        {/* Bought At : ₹ {buyPrice?.toLocaleString("en-IN")} */}
+                        Bought At : ₹ {buyPrice?.toLocaleString("en-IN")}
                       </p>
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>
@@ -383,71 +396,6 @@ const CarDetail = () => {
           </div>
 
           <RatingAndReview />
-
-          {/* REVIEW
-          <div
-            id="car-container"
-            className="w-[90%]  max-h-[40vh] overflow-y-auto mx-auto mb-20 border bg-gray-100 text-gray-700 font-semibold text-lg rounded-lg p-3 pt-0"
-          >
-            <h3 className="sticky pt-1 top-0 bg-gray-100">Reviews</h3>
-            {selectedCar?.review != 0 ? (
-              selectedCar?.review.map((review) => {
-                // console.log({ review });
-                return (
-                  <div
-                    className="text-base mt-1 mb-2 bg-white rounded-lg p-2 font-normal"
-                    key={review?._id}
-                  >
-                    <div className="flex items-center gap-1">
-                      {" "}
-                      <CircleUser size={16} />
-                      <p className="capitalize flex-[.1]">
-                        {review?.buyer_id?.user_name}
-                      </p>
-                      {review?.buyer_id?._id == user?._id && (
-                        <p
-                          onClick={() => {
-                            const id =
-                              notifyPendingPromise("Deleting Review...");
-                            dispatch(asyncDeleteReview(review._id)).then(
-                              (res) => {
-                                if (res == 200)
-                                  notifySuccessPromise(
-                                    id,
-                                    "Review deleted successfully!"
-                                  );
-                                else notifyErrorPromise(id, res.message);
-                              }
-                            );
-                          }}
-                          className="px-2 py-1 text-gray-600 hover:bg-gray-50 hover:text-red-500 hover:scale-105 transition-all rounded-md cursor-pointer text-xs bg-gray-100 uppercase"
-                        >
-                          delete
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <p className="my-1 flex-[0.1] ">⭐ {review.rating}</p>
-                      <p
-                        className={`text-sm flex-[0.9] ${
-                          !review.comment && "text-gray-400"
-                        }`}
-                      >
-                        {review.comment || "No comments"}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-sm text-gray-400 text-center py-5">
-                No Review
-              </p>
-            )}
-          </div>
-
-          Add REVIEW
-          <AddReview /> */}
 
           {/* Recent Cars */}
           <div className=" container md:px-8 mt-0 mb-10">
@@ -464,7 +412,7 @@ const CarDetail = () => {
                 View All
               </h1>
             </div>
-            <div className="grid md:grid-cols-4 gap-7 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-4">
               {
                 // (userType !== "Dealer"
                 //   ? allCars.slice(0, 5)
@@ -480,7 +428,6 @@ const CarDetail = () => {
 
                     if ((user?.watch_list || []).includes(car?._id))
                       watchList = true;
-
                     return (
                       <Card car={car} isWishlist={watchList} key={index} />
                     );

@@ -17,9 +17,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncGetAllCars } from "../store/actions/carActions";
 import { notifyError } from "../utils/Toast";
-import {
-  useLocation,
-} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const { search } = useLocation();
@@ -136,8 +134,8 @@ const HomePage = () => {
       >
         <div className="flex flex-col justify-center">
           <div className="relative md:-mt-40 2xl:mb-0">
-            <div className=" relative w-fit">
-              <h1 className=" md:text-[48px] text-3xl font-semibold text-[#242424] md:leading-[50px]">
+            <div className=" relative w-full md:w-fit">
+              <h1 className=" md:text-[48px] text-3xl w-full text-center md:text-start font-semibold text-[#242424] md:leading-[50px]">
                 Find, book and <br /> buy a car{" "}
                 <span className="text-[#1572D3]">Easily</span>
               </h1>
@@ -147,18 +145,20 @@ const HomePage = () => {
                 className=" absolute right-0 bottom-[-15px] hidden md:flex"
               />
             </div>
-            <p className="text-sm md:text-lg text-[#272727] font-medium leading-6 mt-3 md:mt-7">
+            <p className="text-sm md:text-lg text-[#272727] font-medium leading-6 mt-3 md:mt-7 text-center md:text-start">
               Elevate your car buying experience with <br /> seamless solutions
               tailored just for you <br /> find, finance, and drive your dream
               car <br /> effortlessly
             </p>
           </div>
-          <img
+         <div>
+         <img
             // ref={imageRef}
             src={Hero_img}
             alt="hero img"
-            className="md:absolute md:right-0 md:top-0"
+            className="md:absolute z-[-10] md:right-0 md:top-0"
           />
+         </div>
         </div>
       </div>
 
@@ -175,20 +175,20 @@ const HomePage = () => {
       <section
         // ref={containerRef2}
         id="why-choose-us"
-        className="relative 2xl:container md:h-screen flex flex-col-reverse md:flex-row"
+        className="relative  2xl:container md:h-screen flex flex-col-reverse md:flex-row"
       >
-        <div className="md:absolute md:left-0 md:top-0">
+        <div className="hidden lg:block lg:absolute md:left-0 md:top-0">
           <img
             src={Choose_us_img}
             alt="hero img"
             // ref={imageRef2}
           />
         </div>
-        <div className="container relative md:w-fit md:left-[20%] md:top-[10%]">
-          <span className="py-3 px-6 bg-[#E8F1FB] text-[#1572D3] text-sm font-medium rounded-lg">
+        <div className="container relative bg-[rgba(255,255,255,.3)] lg:bg-inherit md:w-fit lg:left-[20%] lg:top-[10%]">
+          <span className="py-3 px-6  bg-[#E8F1FB] text-[#1572D3] text-sm font-medium rounded-lg ">
             WHY CHOOSE US
           </span>
-          <h1 className="md:text-[38px] text-2xl font-medium text-[#333333] md:leading-[45px] mt-8">
+          <h1 className="md:text-[38px] text-2xl font-medium text-[#333333] md:leading-[45px] mt-8 text-start">
             We offer the best experience <br /> with our buying deals
           </h1>
           <div className="mt-5">
@@ -199,11 +199,20 @@ const HomePage = () => {
                 </div>
                 <div>
                   <h1 className="text-base md:text-xl font-medium text-black">
-                    Best price guaranteed
+                    {index == 0 && "Best price guaranteed"}
+                    {index == 1 && "Live Chat and Negotiation"}
+                    {index == 2 && "Personalized Service"}
+                    {index == 3 && "24/7 Customer Support"}
                   </h1>
-                  <p className="text-sm md:text-base text-[#6D6D6D] font-normal mt-1">
-                    Find a lower price? We&apos;ll refund you 100% of the
-                    difference.
+                  <p className="text-sm md:text-base  text-slate-700 lg:text-[#6D6D6D] font-normal mt-1">
+                    {index == 0 &&
+                      "Find a lower price? We&apos;ll refund you 100% of the difference."}
+                    {index == 1 &&
+                      "Chat with us live and negotiate your terms directly with our team."}
+                    {index == 2 &&
+                      "Get tailored recommendations and guidance throughout your purchase."}
+                    {index == 3 &&
+                      "Our dedicated support team is here round the clock for any assistance you need."}
                   </p>
                 </div>
               </div>

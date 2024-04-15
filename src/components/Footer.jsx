@@ -9,16 +9,16 @@ const Footer = () => {
             <div className="flex h-full flex-col justify-between">
               <div className=" flex items-center  gap-3">
                 <Logo color="white" />
-                <h1 className=" text-base text-white font-semibold">
+                <h1 className=" text-sm md:text-base text-white font-semibold">
                   Buy Cars
                 </h1>
               </div>
               <div>
-                <p className="mb-4  text-base font-medium">
-                  The Tailwind CSS Component library
+                <p className="mb-4  text-sm md:text-base font-medium">
+                Simplifying Car Buying.
                 </p>
-                <p className="text-sm text-gray-600">
-                  © Copyright 2022. All Rights Reserved by DevUI.
+                <p className="text-xs md:text-sm text-gray-600">
+                  © Copyright 2022. All Rights Reserved by Car-Dealership.
                 </p>
               </div>
             </div>
@@ -30,22 +30,22 @@ const Footer = () => {
               </h3>
               <ul>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Features
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Pricing
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Affiliate Program
                   </a>
                 </li>
                 <li>
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Press Kit
                   </a>
                 </li>
@@ -59,22 +59,22 @@ const Footer = () => {
               </h3>
               <ul>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Account
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Help
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Contact Us
                   </a>
                 </li>
                 <li>
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Customer Support
                   </a>
                 </li>
@@ -88,17 +88,17 @@ const Footer = () => {
               </h3>
               <ul>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Terms &amp; Conditions
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a className=" text-base font-medium text-[#D6D6D6]" href="#">
+                  <a className=" text-sm md:text-base font-medium text-[#D6D6D6]" href="#">
                     Licensing
                   </a>
                 </li>
