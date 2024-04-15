@@ -39,46 +39,49 @@ const DealHistory = () => {
         <div>
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div>
-              <h2 className="text-xl font-semibold">History</h2>
+              <h2 className="text-base lg:text-xl font-semibold">History</h2>
               <p className="mt-1 text-sm font-medium text-gray-700"></p>
             </div>
           </div>
           <div className="flex flex-col">
             <div className="overflow-hidden">
               <div className=" flex-1 py-2 align-middle">
-                <div className="overflow-hidden border border-gray-200 md:rounded-lg">
+                <div
+                  id="message-container"
+                  className="overflow-x-auto border border-gray-200 md:rounded-lg"
+                >
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
                         <th
                           scope="col"
-                          className="px-4 py-3.5 text-left text-sm font-semibold text-gray-700"
+                          className="px-4 py-3.5 text-left text-xs lg:text-sm font-semibold text-gray-700"
                         >
                           No.
                         </th>
                         <th
                           scope="col"
-                          className="px-4 py-3.5 text-left text-sm font-semibold text-gray-700"
+                          className="px-4 py-3.5 text-left text-xs lg:text-sm font-semibold text-gray-700"
                         >
                           <span>User&apos;s Name</span>
                         </th>
                         <th
                           scope="col"
-                          className="px-12 py-3.5 text-left text-sm font-semibold text-gray-700"
+                          className="px-12 py-3.5 text-left text-xs lg:text-sm font-semibold text-gray-700"
                         >
                           Car Name
                         </th>
 
                         <th
                           scope="col"
-                          className="px-4 py-3.5 text-left text-sm font-semibold text-gray-700"
+                          className="px-4 py-3.5 text-left text-xs lg:text-sm font-semibold text-gray-700"
                         >
                           Price
                         </th>
 
                         <th
                           scope="col"
-                          className="px-4 py-3.5 text-left text-sm font-semibold text-gray-700"
+                          className="px-4 py-3.5 text-left text-xs lg:text-sm font-semibold text-gray-700"
                         >
                           Status
                         </th>
@@ -88,7 +91,7 @@ const DealHistory = () => {
                       {myDeals ? (
                         myDeals?.map((deal, index) => (
                           <tr key={deal._id || index}>
-                            <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
+                            <td className="whitespace-nowrap px-4 py-4 text-xs lg:text-sm font-medium text-gray-700">
                               {index + 1}
                             </td>
                             <td className="whitespace-nowrap px-4 py-4">
@@ -101,24 +104,24 @@ const DealHistory = () => {
                                   />
                                 </div>
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
+                                  <div className="text-xs lg:text-sm font-medium text-gray-900">
                                     {deal?.buyer_id?.user_name}
                                   </div>
-                                  <div className="text-sm font-medium text-gray-700">
+                                  <div className="text-xs lg:text-sm font-medium text-gray-700">
                                     {deal?.buyer_id?.email}
                                   </div>
                                 </div>
                               </div>
                             </td>
                             <td className="whitespace-nowrap px-12 py-4">
-                              <div className="text-sm font-medium text-gray-900 ">
+                              <div className="text-xs lg:text-sm font-medium text-gray-900 ">
                                 {deal?.car_id?.name}
                               </div>
-                              <div className="text-sm font-medium text-gray-700">
+                              <div className="text-xs lg:text-sm font-medium text-gray-700">
                                 {deal?.car_id?.type}
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-700">
+                            <td className="whitespace-nowrap px-4 py-4 text-xs lg:text-sm font-medium text-gray-700">
                               ₹ {deal?.price.toLocaleString("en-In")}
                             </td>
                             <td className="whitespace-nowrap px-4 py-4">

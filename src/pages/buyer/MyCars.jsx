@@ -7,10 +7,6 @@ const MyCars = () => {
   const [myCars, setMyCars] = useState([]);
 
   useEffect(() => {
-    document.title = "My Cars";
-  }, []);
-
-  useEffect(() => {
     let cars = [];
     allCars?.map((car) => {
       if (car.sold && user?._id == car?.buyer_id) cars.push(car);
@@ -21,8 +17,11 @@ const MyCars = () => {
 
   return (
     <div className="relative">
-      <div className=" container bg-gray-100 px-10 my-3 pb-4">
-        <div className="grid grid-cols-4 gap-7 mt-4 px-1">
+      <div className=" container px-2 pb-4">
+        <h1 className=" md:text-[38px] text-2xl md:ml-0 font-medium text-black mb-4">
+          My Cars
+        </h1>
+        <div className="grid md:grid-cols-4 gap-7 px-1">
           {myCars?.length != 0 ? (
             myCars?.map((car) => <Card key={car._id} car={car} buy={false} />)
           ) : (

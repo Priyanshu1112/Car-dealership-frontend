@@ -116,8 +116,8 @@ const ChatBuyer = () => {
     <div
       ref={chatRef}
       className={`${
-        isOpen ? "w-[45vw]" : "w-[15vw]"
-      } text-white z-[9999] p-1 transition-all rounded-md w-[20vw] fixed bottom-2 right-2`}
+        isOpen ? "w-[95vw] md:w-[70vw] lg:w-[45vw]" : "w-[25vw] lg:w-[15vw]"
+      } text-white z-[9999] p-1 transition-all rounded-md w-[20vw] fixed bottom-0 lg:bottom-2 right-2`}
     >
       <div
         id="chat"
@@ -125,13 +125,19 @@ const ChatBuyer = () => {
         className="bg-[#0e4e92] p-2 rounded-md mb-2 flex justify-between items-center cursor-pointer border border-white"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="flex items-center gap-2">
+        <h3 className="flex md:hidden text-xs items-center gap-2">Chat</h3>
+        <h3 className="md:flex hidden items-center gap-2">
           {" "}
           <MessageSquareMore size={16} /> Chat
         </h3>
         <div className="flex gap-3">
           <Badge badgeContent={unreadChat?.length} color="secondary">
-            <Bell size={20} />
+            <div className="hidden md:block">
+              <Bell size={20} />
+            </div>
+            <div className="block md:hidden">
+              <Bell size={15} />
+            </div>
           </Badge>
           {isOpen && <CircleX size={20} />}
         </div>
@@ -146,7 +152,7 @@ const ChatBuyer = () => {
       >
         <div
           id="car-container"
-          className="flex-[0.3] p-1 divide-y-2 divide-gray-200 overflow-y-scroll overflow-x-hidden"
+          className="lg:flex-[0.3] flex-[.4] p-1 divide-y-2 divide-gray-200 overflow-y-scroll overflow-x-hidden"
         >
           {/* ALL CHATS */}
           {user?.chat.map((chat) => {
@@ -161,22 +167,41 @@ const ChatBuyer = () => {
                   dispatch(updateSelectedChat(chat));
                 }}
                 key={chat._id}
-                className={`text-sm  grid gap-2 grid-rows-2 grid-cols-2 p-1 hover:bg-gray-200 transition-all rounded-md  hover:scale-100 cursor-pointer ${
+                className={`lg:text-sm md:text-xs text-[2vmin] max-h-[10vmax] lg:max-h-[7vmax] grid gap-2 grid-rows-2 grid-cols-2 p-1 hover:bg-gray-200 transition-all rounded-md  hover:scale-100 cursor-pointer ${
                   selectedChat?._id == chat?._id
                     ? " bg-gray-300 scale-100"
                     : "scale-90 "
                 }`}
               >
-                <div className="col-start-1 row-start-1  row-span-2 border bg-white border-red-500 rounded-md">
+                <div className="col-start-1 row-start-1   row-span-2 border bg-white border-red-500 rounded-md">
                   <img
                     src={chat?.car_id?.image.main.url ?? CarImage}
                     alt="car_img"
                     className="h-full w-full object-contain rounded-md"
                   />
                 </div>
-                <span className="col-start-2">{chat?.chat_name_buyer}</span>
-                <span className="row-start-2 col-start-2 text-xs">
-                  {chat?.last_message}{" "}
+                <span
+                  className="col-start-2 overflow-ellipsis overflow-hidden"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
+                  {chat?.chat_name_buyer}
+                </span>
+                <span className="row-start-2 col-start-2 lg:text-xs">
+                  <p
+                    className="row-start-2 col-start-2 lg:text-xs overflow-hidden overflow-ellipsis"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
+                    {chat?.last_message || "No messages"}{" "}
+                  </p>
+
                   {(unreadChat?.includes(chat?._id) || isUnread) && (
                     <span className="ml-auto text-xs text-green-600 font-semibold">
                       Unread
@@ -188,17 +213,17 @@ const ChatBuyer = () => {
           })}
         </div>
         {/* CHAT-AREA */}
-        <div className="flex-[0.7] bg-gray-100 px-1">
+        <div className="lg:flex-[0.7] flex-[.6] bg-gray-100 px-1">
           {!selectedChat ? (
             <div className="w-full h-full flex gap-3 flex-col text-base items-center justify-center">
               Start Chatting!{" "}
-              <span className="text-xs">
+              <span className="text-xs text-center">
                 And Grab yourself an amazing deal!
               </span>
               <MessageSquareMore size={26} className="text-blue-700" />
             </div>
           ) : (
-            <div className="w-full cursor-pointer h-full flex flex-col overflow-y-hidden text-base ">
+            <div className="w-full cursor-pointer h-full flex flex-col overflow-y-hidden lg:text-base md:text-sm text-xs">
               <div
                 onClick={() => {
                   const carIndex = allCars?.findIndex(
@@ -220,7 +245,7 @@ const ChatBuyer = () => {
                     className="h-full w-full object-contain rounded-md"
                   />
                 </div>
-                <span className="text-base">
+                <span className="lg:text-base md:text-sm text-xs">
                   {selectedChat?.chat_name_buyer}
                 </span>
               </div>
@@ -233,7 +258,7 @@ const ChatBuyer = () => {
                 <div className="sticky flex justify-center py-1 divide-x-2 divide-gray-400 top-0 left-0 w-full bg-gray-100">
                   <span
                     onClick={() => setChat("bargain")}
-                    className={`px-5 cursor-pointer text-gray-400 ${
+                    className={`px-5 cursor-pointer text-gray-400 lg:text-base md:text-sm text-xs ${
                       chat == "bargain" && "underline text-gray-600"
                     }`}
                   >
@@ -241,7 +266,7 @@ const ChatBuyer = () => {
                   </span>
                   <span
                     onClick={() => setChat("chat")}
-                    className={`px-5 cursor-pointer text-gray-400 ${
+                    className={`px-5 cursor-pointer text-gray-400 lg:text-base md:text-sm text-xs ${
                       chat == "chat" && "underline text-gray-600"
                     }`}
                   >
@@ -251,14 +276,14 @@ const ChatBuyer = () => {
                 {chat == "chat" ? (
                   <div
                     id="car-container"
-                    className="flex-1 flex flex-col gap-2  p-2"
+                    className="flex-1 flex flex-col gap-2 lg:text-base md:text-sm text-xs  p-2"
                   >
                     {selectedChat?.messages.map((message) => {
                       if (message.sender == user?._id) {
                         return (
                           <div
                             key={message._id}
-                            className="bg-white text-sm ml-auto p-2 rounded-xl rounded-ee-none"
+                            className="bg-white  ml-auto p-2 rounded-xl rounded-ee-none text-[2vmin]   md:text-xs"
                           >
                             {message.message}
                           </div>
@@ -267,7 +292,7 @@ const ChatBuyer = () => {
                       return (
                         <div
                           key={message._id}
-                          className="bg-blue-600 text-sm mr-auto text-white  p-2 rounded-xl rounded-es-none"
+                          className="bg-blue-600  mr-auto  md:text-xs text-[2vmin] text-white  p-2 rounded-xl rounded-es-none"
                         >
                           {message.message}
                         </div>
@@ -278,16 +303,15 @@ const ChatBuyer = () => {
                   // BARGAIN
                   <div
                     id="car-container"
-                    className="flex-1 flex flex-col gap-2  p-2"
+                    className="flex-1 flex flex-col gap-2  md:text-xs text-[2vmin] p-2"
                   >
                     {!user?.cars?.includes(selectedChat?.car_id?._id) ? (
                       selectedChat?.bargain?.map((bargain, index) => {
-                        
                         if (bargain.sender == user?._id) {
                           return (
                             <div
                               key={bargain._id || index}
-                              className="bg-white text-sm flex flex-col gap-1 items-center  p-2 rounded-xl text-center"
+                              className="bg-white  md:text-xs text-[2vmin] flex flex-col gap-1 items-center  p-2 rounded-xl text-center"
                             >
                               <p>
                                 My Offer : ₹{" "}
@@ -300,7 +324,7 @@ const ChatBuyer = () => {
                                     : bargain.price.status == "Accepted"
                                     ? "bg-green-300"
                                     : "bg-red-300"
-                                } p-1 text-gray-600 text-xs rounded-md`}
+                                } p-1 text-gray-600  md:text-xs text-[2vmin] rounded-md`}
                               >
                                 {bargain.price.status == "Ongoing"
                                   ? "No Reply"
@@ -314,7 +338,7 @@ const ChatBuyer = () => {
                         return (
                           <div
                             key={bargain._id || index}
-                            className="bg-white text-sm flex flex-col gap-1 items-center  p-2 rounded-xl text-center"
+                            className="bg-white  md:text-xs text-[2vmin] flex flex-col gap-1 items-center  p-2 rounded-xl text-center"
                           >
                             <p>
                               Dealer Offer : ₹{" "}
@@ -364,7 +388,7 @@ const ChatBuyer = () => {
                                   bargain?.price?.status == "Rejected"
                                     ? "text-red-400"
                                     : "text-green-400"
-                                } text-xs`}
+                                } lg:text-base md:text-xs text-[2vmin]`}
                               >
                                 You {bargain?.price?.status} the bargain
                               </p>

@@ -1,11 +1,4 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  CircleUser,
-  LoaderCircle,
-  Pencil,
-  Trash,
-} from "lucide-react";
+import { LoaderCircle, Pencil, Trash } from "lucide-react";
 import Car_img from "/assets/image/car_img1.png";
 import User_icon from "/assets/icon/user_icon.svg";
 import Type_icon from "/assets/icon/type_icon.svg";
@@ -17,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateSelectedCar } from "../../store/reducers/appReducer";
 import { Rating } from "@mui/material";
+import RatingAndReview from "../../components/RatingAndReview";
 
 const CarDetailDealer = () => {
   const navigate = useNavigate();
@@ -32,15 +26,6 @@ const CarDetailDealer = () => {
     selectedCar?.image?.tertiary?.url || Car_img,
   ];
 
-  const handleLeft = () => {
-    if (activeImage == 0) setActiveImage(2);
-    else setActiveImage(activeImage - 1);
-  };
-
-  const handleRight = () => {
-    if (activeImage == 2) setActiveImage(0);
-    else setActiveImage(activeImage + 1);
-  };
   useEffect(() => {
     const scrollToTop = () => {
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
@@ -69,7 +54,10 @@ const CarDetailDealer = () => {
   }, [index]);
 
   return (
-    <>
+    <div
+      id="message-container"
+      className="h-screen overflow-x-hidden overflow-y-auto"
+    >
       {!selectedCar ? (
         <div className="w-full p-[10vmax] flex justify-center">
           <LoaderCircle className="rotate" />
@@ -79,7 +67,7 @@ const CarDetailDealer = () => {
           <div className="overflow-hidden mt-8">
             <div className="mb-9">
               <div className=" grid grid-cols-2 items-start gap-2">
-                <div className="items-center justify-center h-full overflow-hidden md:mb-8 lg:mb-0 xl:flex">
+                {/* <div className="items-center justify-center h-full overflow-hidden md:mb-8 lg:mb-0 xl:flex">
                   <div className="w-full gap-2 xl:flex xl:flex-row-reverse">
                     <div className=" relative">
                       <div className="relative flex items-center justify-center">
@@ -122,21 +110,65 @@ const CarDetailDealer = () => {
                       ))}
                     </div>
                   </div>
+                </div> */}
+
+                <div className="">
+                  <div className="w-full flex flex-row-reverse gap-4">
+                    <div className="relative mb-2.5 overflow-hidden rounded-md border w-full min-h-[20vh] lg:min-h-[50vh]">
+                      <div className=" absolute top-[20px] left-[-25px] bg-red-400 z-20 px-10 -rotate-45 font-semibold text-base ">
+                        Sold
+                      </div>
+                      <div className="relative flex items-center justify-center w-full h-full">
+                        <img
+                          alt="Product gallery 1"
+                          src={images[activeImage]}
+                          // width={650}
+                          // height={590}
+                          className="rounded-lg object-contain h-full w-full"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {images.map((image, index) => (
+                        <div key={index} className=" relative overflow-hidden">
+                          {/* <div className=" absolute top-[10px] left-[-15px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[8px] ">
+                            sold
+                          </div> */}
+                          <div
+                            onMouseEnter={() => setActiveImage(index)}
+                            key={index}
+                            className="flex cursor-pointer items-center justify-center overflow-hidden rounded transition hover:opacity-75 "
+                          >
+                            <img
+                              alt={`Product ${index}`}
+                              src={image}
+                              // width={100}
+                              // height={100}
+                              className="h-20 w-20 object-cover md:h-24 md:w-24 lg:h-28 lg:w-28 xl:w-32"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex shrink-0 flex-col bg-white h-full rounded-xl px-6 pr-10">
+
+                <div className="flex shrink-0 flex-col h-full rounded-xl px-6 pr-10">
                   <div className="flex items-start justify-between ">
                     <div className="pb-3">
-                      <h2 className="text-[32px] font-semibold">
+                      <h2 className="lg:text-[32px] text-[16px] font-semibold">
                         {selectedCar.name} {selectedCar.model}
                       </h2>
-                      <p className="mt-1 text-sm font-normal flex items-center gap-2">
-                        <Rating
-                          readOnly
-                          value={selectedCar?.rating || 0}
-                          precision={0.1}
-                        />
-                        <span className=" text-[#596780]">
-                          ({selectedCar?.rating})
+                      <p className="mt-1 text-sm font-normal flex flex-col lg:flex-row lg:items-center gap-2">
+                        <span className="flex items-center">
+                          <Rating
+                            readOnly
+                            value={selectedCar?.rating || 0}
+                            precision={0.1}
+                          />
+                          <span className=" text-[#596780]">
+                            ({selectedCar?.rating})
+                          </span>
                         </span>
                         <span className=" text-[#596780]">
                           {selectedCar?.review?.length || 0} Reviewer
@@ -144,13 +176,13 @@ const CarDetailDealer = () => {
                       </p>
                     </div>
                   </div>
-                  <p className=" text-base text-[#596780] font-normal w-[70%] leading-7">
+                  <p className="hidden lg:block text-base text-[#596780] font-normal w-[70%] leading-7">
                     {selectedCar.description
                       ? selectedCar.description
                       : "No description!"}
                   </p>
 
-                  <div className=" grid grid-cols-2 w-1/2 gap-x-10 pb-2 mt-2">
+                  <div className=" grid grid-cols-1 lg:grid-cols-2 w-1/2 gap-x-10 pb-2 mt-2">
                     {[
                       {
                         icon: User_icon,
@@ -174,29 +206,29 @@ const CarDetailDealer = () => {
                         {/* <span className=" text-sm font-normal text-[#959595] text-nowrap">
                       {info.title}
                     </span> */}
-                        <span className=" text-sm font-normal text-[#959595] text-nowrap">
+                        <span className="text-xs lg:text-sm font-normal text-[#959595] text-nowrap">
                           {info.content}
                         </span>
                       </div>
                     ))}
                   </div>
 
-                  <div className=" flex items-center justify-between">
-                    <div className="  mt-2 flex flex-col">
-                      <span className=" text-[22px] font-semibold">
+                  <div className=" flex  items-center justify-between">
+                    <div className="  mt-2 ">
+                      <span className="text-[15px] lg:text-[22px] font-semibold">
                         ₹ {selectedCar.price.toLocaleString("en-In")}
                       </span>
                     </div>
 
                     {!selectedCar?.sold && (
-                      <div className="flex divide-x text-sm">
+                      <div className="flex flex-col lg:flex-row lg:divide-x text-xs lg:text-sm">
                         <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             console.log("remove clicked");
                           }}
-                          className="flex items-center space-x-2 px-2 py-1 pl-0 hover:text-red-400"
+                          className="flex items-center space-x-2  lg:px-2 py-1 pl-0 hover:text-red-400"
                         >
                           <Trash size={16} />
                           <span>Remove</span>
@@ -208,7 +240,7 @@ const CarDetailDealer = () => {
                             dispatch(updateSelectedCar(selectedCar));
                             navigate("/dealer/edit-Car");
                           }}
-                          className="flex items-center space-x-2 px-2 py-1 hover:text-blue-400"
+                          className="flex items-center space-x-2 lg:px-2 py-1 hover:text-blue-400"
                         >
                           <Pencil size={16} />
                           <span>Edit</span>
@@ -221,7 +253,13 @@ const CarDetailDealer = () => {
             </div>
           </div>
 
-          {/* REVIEW */}
+          <div className="lg:hidden block lg:text-base text-sm text-[#596780] font-normal w-full leading-7">
+            {selectedCar.description
+              ? selectedCar.description
+              : "No description!"}
+          </div>
+
+          {/* REVIEW
           <div
             id="car-container"
             className="w-[90%]  max-h-[40vh] overflow-y-auto mx-auto mb-20 border bg-gray-100 text-gray-700 font-semibold text-lg rounded-lg p-3 pt-0"
@@ -254,9 +292,47 @@ const CarDetailDealer = () => {
                 </div>
               );
             })}
+          </div> */}
+          <RatingAndReview />
+
+          <div className=" container px-8 mt-0 mb-10">
+            <div className=" flex items-center justify-between">
+              <h4 className="text-[30px] text-gray-800 mb-3 font-semibold capitalize pb-2">
+                My Cars
+              </h4>
+              <h1
+                onClick={() => {
+                  navigate("/dealer/my-cars");
+                }}
+                className="cursor-pointer text-base font-medium text-[#3563E9] hover:underline"
+              >
+                View All
+              </h1>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-7 mt-4">
+              {
+                // (userType !== "Dealer"
+                //   ? allCars.slice(0, 5)
+                //   : myCars.slice(0, 4)
+                // )
+                myCars
+                  ?.filter((car) => car?._id != selectedCar?._id)
+                  .slice(0, 4)
+                  ?.map((car, index) => {
+                    let watchList = false;
+
+                    if ((user?.watch_list || []).includes(car?._id))
+                      watchList = true;
+
+                    return (
+                      <Card car={car} isWishlist={watchList} key={index} />
+                    );
+                  })
+              }
+            </div>
           </div>
 
-          <div className=" container mt-20">
+          {/* <div className=" container mt-20">
             <div className=" flex items-center justify-between">
               <h1 className=" text-xl font-medium text-black">My Cars</h1>
               <h1
@@ -274,10 +350,10 @@ const CarDetailDealer = () => {
                 return <Card car={car} key={index} />;
               })}
             </div>
-          </div>
+          </div> */}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

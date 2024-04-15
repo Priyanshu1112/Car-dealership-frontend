@@ -85,14 +85,14 @@ const Bargains = () => {
   };
 
   return (
-    <div className=" h-[90vh] p-5 flex gap-2">
+    <div className="h-[85vh] lg:h-[90vh] p-5 flex gap-2">
       {/* Chats */}
       <div
         id="message-container"
         style={{ boxShadow: "0px 5px 5px rgba(0,0,0, 0.3)" }}
         className="flex-[.3] bg-gray-100 overflow-y-scroll relative rounded-xl p-2 pt-0 divide-y-2 divide-gray-200"
       >
-        <h3 className="text-lg font-semibold  sticky z-50 top-0 left-0 bg-[#0e4e92]  text-white p-3 rounded-lg">
+        <h3 className="lg:text-lg text-base font-semibold  sticky  z-50 top-0 left-0 bg-[#0e4e92]  text-white p-2 lg:p-3 rounded-lg">
           Chats
         </h3>
         {user?.chat.map((chat) => {
@@ -107,7 +107,7 @@ const Bargains = () => {
                 dispatch(updateSelectedChat(chat));
               }}
               key={chat._id}
-              className={`text-sm  grid gap-2 grid-rows-2 grid-cols-2 p-1 hover:bg-gray-200 transition-all rounded-md  hover:scale-100 cursor-pointer ${
+              className={`text-sm max-h-[10vmax] grid gap-2 grid-rows-2 grid-cols-2 p-1 hover:bg-gray-200 transition-all rounded-md  hover:scale-100 cursor-pointer ${
                 selectedChat?._id == chat?._id
                   ? " bg-gray-300 scale-100"
                   : "scale-90 "
@@ -120,13 +120,29 @@ const Bargains = () => {
                   className="h-full w-full object-contain rounded-md"
                 />
               </div>
-              <span className="col-start-2 capitalize">
-                {chat?.chat_name_dealer} - {chat?.chat_name_buyer} -
+              <span
+                className="col-start-2 text-xs capitalize overflow-hidden overflow-ellipsis"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {chat?.chat_name_dealer} ({chat?.chat_name_buyer})
               </span>
-              <span className="row-start-2 flex justify-between col-start-2 text-xs">
-                {chat?.last_message}{" "}
+              <span className="row-start-2 whitespace-nowrap overflow-hidden overflow-ellipsis flex flex-col col-start-2 text-xs">
+                {chat?.last_message ? (
+                  chat?.last_message
+                ) : (
+                  <span className="text-[1.5vmin] text-slate-400">
+                    No Last Message
+                  </span>
+                )}{" "}
+                  {/* <span className="text-[1.3vmin]  lg:text-[1.5vmin] text-green-600 font-semibold">
+                    Unread
+                  </span> */}
                 {(unreadChat?.includes(chat?._id) || isUnread) && (
-                  <span className="ml-auto text-xs text-green-600 font-semibold">
+                  <span className="text-[1.3vmin] lg:text-[1.5vmin] text-green-600 font-semibold">
                     Unread
                   </span>
                 )}
@@ -168,7 +184,7 @@ const Bargains = () => {
                   className="h-full w-full object-contain rounded-md"
                 />
               </div>
-              <span className="text-base capitalize">
+              <span className="lg:text-base text-sm capitalize">
                 {selectedChat?.chat_name_dealer} -{" "}
                 {selectedChat?.chat_name_buyer}
               </span>
@@ -179,7 +195,7 @@ const Bargains = () => {
               className="flex-[0.9]  flex overflow-y-scroll flex-col bg-gray-200"
             >
               {/* //Messages */}
-              <div className="sticky flex justify-center py-1 divide-x-2 divide-gray-400 top-0 left-0 w-full bg-gray-100">
+              <div className="sticky text-sm  flex justify-center py-1 divide-x-2 divide-gray-400 top-0 left-0 w-full bg-gray-100">
                 <span
                   onClick={() => setChat("bargain")}
                   className={`px-5 cursor-pointer text-gray-400 ${

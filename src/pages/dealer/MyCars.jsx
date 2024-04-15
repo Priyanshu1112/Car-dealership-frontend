@@ -62,14 +62,14 @@ const MyCars = () => {
   }, [page]);
 
   return (
-    <div className=" container flex flex-col py-4">
-      <div className="mt-7 w-full justify-between flex items-center gap-7">
+    <div className=" container flex flex-col py-4 ">
+      <div className="mt-7 text-xs lg:text-base w-full justify-between flex items-center gap-7">
         <div>
           <button
             onClick={() => setActiveTab("AllCars")}
             className={` ${
               activeTab == "AllCars" ? "bg-white font-semibold shadow-2xl" : ""
-            } p-4  rounded-t-xl transition-all`}
+            } p-2 lg:p-4  rounded-t-xl transition-all`}
           >
             All Cars
           </button>
@@ -79,7 +79,7 @@ const MyCars = () => {
               activeTab == "ActiveCars"
                 ? "bg-white font-semibold shadow-lg"
                 : ""
-            } p-4  rounded-t-xl transition-all`}
+            } p-2 lg:p-4  rounded-t-xl transition-all`}
           >
             Active Cars
           </button>
@@ -87,7 +87,7 @@ const MyCars = () => {
             onClick={() => setActiveTab("Ongoing")}
             className={` ${
               activeTab == "Ongoing" ? "bg-white font-semibold shadow-2xl" : ""
-            } p-4  rounded-t-xl transition-all`}
+            } p-2 lg:p-4  rounded-t-xl transition-all`}
           >
             Ongoing Deals
           </button>
@@ -95,14 +95,14 @@ const MyCars = () => {
             onClick={() => setActiveTab("SoldCars")}
             className={` ${
               activeTab == "SoldCars" ? "bg-white font-semibold shadow-2xl" : ""
-            } p-4  rounded-t-xl transition-all`}
+            } p-2 lg:p-4  rounded-t-xl transition-all`}
           >
             Sold Cars
           </button>
         </div>
         <Link
           to={`/dealer/add-Car`}
-          className="rounded-md bg-black px-3 py-2 text-sm  font-semibold text-white shadow-lg hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+          className="rounded-md bg-black px-2 lg:px-3 py-1 lg:py-2 text-xs  lg:text-sm  font-semibold text-white shadow-lg hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
         >
           Add new car
         </Link>
@@ -115,7 +115,7 @@ const MyCars = () => {
       >
         <ul
           id="car-container"
-          className="flex flex-col  divide-y divide-gray-300 mt-3"
+          className="flex flex-col divide-y divide-gray-300 max-h-[100vh] overflow-auto "
         >
           {cars ? (
             cars.length == 0 ? (
@@ -128,10 +128,10 @@ const MyCars = () => {
                     dispatch(updateSelectedCar(car));
                     navigate("/dealer/car-detail");
                   }}
-                  className="flex flex-col  sm:flex-row sm:justify-between px-6 py-2 hover:bg-gray-50 hover:scale-105 transition-all cursor-pointer"
+                  className="flex flex-col sm:flex-row sm:justify-between px-6 py-5 hover:bg-[#E1E9FC60] transition-all cursor-pointer"
                 >
                   <div className="flex w-full space-x-2 sm:space-x-4 ">
-                    <div className="h-20 w-20 flex items-center justify-center border rounded-lg bg-gray-100 overflow-hidden relative">
+                    {/* <div className="h-20 w-20 flex items-center justify-center border rounded-lg bg-gray-100 overflow-hidden relative">
                       <img
                         className="h-full w-full flex-shrink-0 rounded object-contain outline-none dark:border-transparent sm:h-32 sm:w-32"
                         src={car.image.main?.url || Car_img}
@@ -150,25 +150,67 @@ const MyCars = () => {
                           Sold
                         </div>
                       )}
+                    </div> */}
+
+                    <div className=" relative overflow-hidden">
+                      {car?.bargain &&
+                      !car?.sold &&
+                      (activeTab == "AllCars" || activeTab == "ActiveCars") ? (
+                        <div className=" absolute top-[10px] left-[-20px] bg-green-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
+                          Active
+                        </div>
+                      ) : activeTab == "Ongoing" ? (
+                        <div className=" absolute top-[10px] left-[-20px] bg-yellow-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
+                          Bargain
+                        </div>
+                      ) : (
+                        <div className=" absolute top-[10px] left-[-20px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
+                          Sold
+                        </div>
+                      )}
+                      {car?.sold && activeTab == "AllCars" && (
+                        <div className=" absolute top-[10px] left-[-20px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[12px] ">
+                          Sold
+                        </div>
+                      )}
+                      {/* <div className=" absolute top-[10px] left-[-15px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[8px] ">
+                        sold
+                      </div> */}
+                      <div className="flex cursor-pointer items-center justify-center overflow-hidden rounded transition hover:opacity-75 ">
+                        <img
+                          alt={`${car.name}`}
+                          src={car.image.main?.url || Car_img}
+                          // width={100}
+                          // height={100}
+                          className="h-20 w-20 object-cover hover:scale-125 transition-all duration-300 md:h-24 md:w-24 lg:h-28 lg:w-28 xl:w-32"
+                        />
+                      </div>
                     </div>
-                    <div className="flex w-full flex-col justify-between pb-4">
-                      <div className="flex w-full justify-between space-x-2 pb-2">
+
+                    <div className="flex w-full flex-col justify-between pb-1">
+                      <div className="flex w-full justify-between space-x-2">
                         <div className="space-y-1">
-                          <h3 className="text-lg font-semibold leading-snug sm:pr-8">
+                          <h3 className="lg:text-xl text-sm font-semibold leading-snug sm:pr-8">
                             {car.name}
                           </h3>
-                          <p className="text-sm">{car.model}</p>
-                          <p className="text-sm">{car.type}</p>
+                          <div className="flex gap-2">
+                            <p className="lg:text-sm text-xs font-medium">
+                              {car.type}
+                            </p>
+                            <p className="lg:text-sm text-xs font-medium">
+                              {car.model}
+                            </p>
+                          </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-semibold">
+                          <p className="lg:text-lg text-base font-semibold">
                             ₹ {car.price.toLocaleString("en-In")}
                           </p>
                         </div>
                       </div>
 
                       {!car?.sold && (
-                        <div className="flex divide-x text-sm">
+                        <div className="flex divide-x lg:text-sm text-xs">
                           <button
                             type="button"
                             onClick={(e) => {
@@ -176,7 +218,7 @@ const MyCars = () => {
                               dispatch(updateSelectedCar(car));
                               setDeleteOpen(true);
                             }}
-                            className="flex items-center space-x-2 px-2 py-1 pl-0 hover:text-red-400"
+                            className="flex items-center space-x-2 px-2 pl-0 hover:text-red-400"
                           >
                             <Trash size={16} />
                             <span>Remove</span>
@@ -188,7 +230,7 @@ const MyCars = () => {
                               dispatch(updateSelectedCar(car));
                               navigate("/dealer/edit-Car");
                             }}
-                            className="flex items-center space-x-2 px-2 py-1 hover:text-blue-400"
+                            className="flex items-center space-x-2 px-2 hover:text-blue-400"
                           >
                             <Pencil size={16} />
                             <span>Edit</span>

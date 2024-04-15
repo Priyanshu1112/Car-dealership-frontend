@@ -18,18 +18,17 @@ import {
   notifySuccessPromise,
 } from "./utils/Toast";
 import { asyncCurrentUser } from "./store/actions/appActions";
-import {
-  disconnect,
-  getSocket, initializeConnection
-} from "./utils/Socket";
+import { disconnect, getSocket, initializeConnection } from "./utils/Socket";
 import Cars from "./pages/buyer/Cars";
 import CarDetail from "./pages/buyer/CarDetails";
 import ChatBuyer from "./components/ChatBuyer";
 import {
   acceptPrice,
+  addChat,
   receiveBargain,
   receiveMessage,
   rejectPrice,
+  updateSelectedChat,
   updateUnreadChat,
   updateWatchList,
 } from "./store/reducers/appReducer";
@@ -39,13 +38,10 @@ import { asyncGetAllCars } from "./store/actions/carActions";
 import MyCars from "./pages/buyer/MyCars";
 // import CarDetailDealer from "./pages/dealer/CarDetailDealer";
 // import Wishlist from "./pages/Wishlist";
-import { useMediaQuery } from "@mui/material";
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const isWidth = useMediaQuery("(min-width: 1024px)");
 
   const { isAuthenticated, userType, user, selectedChat } = useSelector(
     (state) => state.app
@@ -58,20 +54,31 @@ const App = () => {
       initializeConnection(user);
       socket.current = getSocket();
       socket.current.on("receive-message", (data) => {
-        console.log("receive-message", data.message);
+        // console.log("receive-message", data.message);
         data.status == 200 && dispatch(receiveMessage(data.message));
       });
       socket.current.on("receive-price", (data) => {
-        console.log("receive-price", data.bargain);
+        // console.log("receive-price", data.bargain);
         data.status == 200 && dispatch(receiveBargain(data.bargain));
       });
       socket.current.on("price-reject", (data) => {
-        console.log("price-reject", data);
+        // console.log("price-reject", data);
         data.status == 200 && dispatch(rejectPrice(data.bargain));
       });
       socket.current.on("price-accept", (data) => {
-        console.log("price-accept", data);
+        // console.log("price-accept", data);
         data.status == 200 && dispatch(acceptPrice(data.bargain));
+      });
+      //for dealer
+      socket.current.on("chat-created", (res) => {
+        console.log(res);
+        if (res.status == 200 || res.status == 201) {
+          dispatch(addChat(res.chat));
+          dispatch(updateSelectedChat(res.chat));
+        } else {
+          console.log(res);
+          notifyError(res.message);
+        }
       });
     } else {
       disconnect();
@@ -127,54 +134,47 @@ const App = () => {
 
   return (
     <>
-      {" "}
-      {isWidth ? (
-        <div>
-          {userType == "Dealer" ? "" : <Navbar />}
-          <Routes>
-            <Route path="/" index element={<HomePage />} />
-            <Route path="/login-dealer" element={<SignInDealer />} />
-            <Route path="/register-dealer" element={<SignUpDealer />} />
-            <Route path="/sign-in" element={<SignInBuyer />} />
-            <Route path="/sign-up" element={<SignUpBuyer />} />
-            <Route path="/cars" element={<Cars />} />
-            <Route
-              path="/dealer/*"
-              element={
-                <IsAuthenticated>
-                  <Dealer />
-                </IsAuthenticated>
-              }
-            />
-            <Route path="/buyer" element={<HomePage />} />
-            <Route
-              path="/buyer/watch-list"
-              element={
-                <IsAuthenticated>
-                  <WatchList />
-                </IsAuthenticated>
-              }
-            />
-            <Route
-              path="/buyer/my-cars"
-              element={
-                <IsAuthenticated>
-                  <MyCars />
-                </IsAuthenticated>
-              }
-            />
-            <Route path="/car-detail" element={<CarDetail />} />
-            {/* <Route path="/dealer/car-detail" element={<CarDetailDealer />} /> */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-          {userType == "Buyer" && <ChatBuyer />}
-        </div>
-      ) : (
-        <div className="flex items-center justify-center text-lg w-screen h-screen">
-          Open on screen &gt;= 1024px for better experience
-        </div>
-      )}
+      <div>
+        {userType == "Dealer" ? "" : <Navbar />}
+        <Routes>
+          <Route path="/" index element={<HomePage />} />
+          <Route path="/login-dealer" element={<SignInDealer />} />
+          <Route path="/register-dealer" element={<SignUpDealer />} />
+          <Route path="/sign-in" element={<SignInBuyer />} />
+          <Route path="/sign-up" element={<SignUpBuyer />} />
+          <Route path="/cars" element={<Cars />} />
+          <Route
+            path="/dealer/*"
+            element={
+              <IsAuthenticated>
+                <Dealer />
+              </IsAuthenticated>
+            }
+          />
+          <Route path="/buyer" element={<HomePage />} />
+          <Route
+            path="/buyer/watch-list"
+            element={
+              <IsAuthenticated>
+                <WatchList />
+              </IsAuthenticated>
+            }
+          />
+          <Route
+            path="/buyer/my-cars"
+            element={
+              <IsAuthenticated>
+                <MyCars />
+              </IsAuthenticated>
+            }
+          />
+          <Route path="/car-detail" element={<CarDetail />} />
+          {/* <Route path="/dealer/car-detail" element={<CarDetailDealer />} /> */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+        {userType == "Buyer" && <ChatBuyer />}
+      </div>
     </>
   );
 };

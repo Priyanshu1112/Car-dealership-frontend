@@ -11,11 +11,22 @@ import { useNavigate } from "react-router-dom";
 import {
   asyncAddWatchList,
   asyncDeleteWatchList,
+  asyncMakePayment,
+  asyncVerifyPayment,
 } from "../store/actions/carActions";
-import { notifyError, notifyInfo, notifySuccess } from "../utils/Toast";
+import {
+  notifyError,
+  notifyInfo,
+  notifyPendingPromise,
+  notifySuccess,
+  notifySuccessPromise,
+} from "../utils/Toast";
 import { useEffect, useState } from "react";
+import useRazorpay from "react-razorpay";
 
 const Card = ({ car, buy = true }) => {
+  const [Razorpay] = useRazorpay();
+
   const { isAuthenticated, userType, watchList } = useSelector(
     (state) => state.app
   );
@@ -38,20 +49,56 @@ const Card = ({ car, buy = true }) => {
     // console.log(myCars, myCars.includes(car._id));
   }, [myCars]);
 
-  const handleBuyNow = (e) => {
+  const handleBuyNow = async (e) => {
     e.stopPropagation();
     if (!isAuthenticated) {
       notifyInfo("Login to perfrom actions!");
       return navigate("/sign-in");
     }
+    const id = notifyPendingPromise("Opening Payment Page...");
     console.log("buy now");
+    // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
+    const res = await dispatch(asyncMakePayment(car?._id, user?._id));
+    console.log({ res });
+    // const result = stripe.redirectToCheckout({ sessionId: res.data.id });
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+      amount: res.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "CARMAX", //your business name
+      description: "Test Transaction",
+      image: car?.image?.main?.url,
+      order_id: res.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
+        dispatch(asyncVerifyPayment(response, car?._id)).then((res) => {
+          if (res == 200) navigate("/buyer/my-cars");
+          else notifyError(res.message);
+        });
+        console.log({ response });
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        name: user?.user_name, //your customer's name
+        email: user?.email,
+        contact: "9000090000", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#1572D3",
+      },
+    };
+    const razor = new Razorpay(options);
+    razor.open();
+    notifySuccessPromise(id, "Opened successfully!");
   };
 
   return (
     <>
       {/* <Link to={"car-detail"}> */}
       <div
-        className=" bg-white shadow-xl p-5 rounded-xl relative hover:cursor-pointer"
+        className=" border-2 border-gray-200 p-5 rounded-xl relative hover:cursor-pointer"
         onClick={() => {
           dispatch(updateSelectedCar(car));
           userType == "Dealer"
@@ -59,10 +106,10 @@ const Card = ({ car, buy = true }) => {
             : navigate(`/car-detail`);
         }}
       >
-        {userType != "Dealer" && (
-          <div className=" absolute top-2 right-3 bg-slate-100 shadow-xl p-1.5 rounded-full flex items-center justify-center cursor-pointer">
-            {!myCars.includes(car._id) ? (
-              watchList?.includes(car._id) ? (
+        {userType != "Dealer" &&
+          (!myCars.includes(car._id) ? (
+            watchList?.includes(car._id) ? (
+              <div className=" absolute z-10 top-2 right-3 bg-slate-100 shadow-xl p-1.5 rounded-full flex items-center justify-center cursor-pointer">
                 <Heart
                   onClick={(e) => {
                     e.stopPropagation();
@@ -76,7 +123,9 @@ const Card = ({ car, buy = true }) => {
                   className={`hover:text-red-300 text-red-300 `}
                   fill={`#FCA5A5`}
                 />
-              ) : (
+              </div>
+            ) : (
+              <div className=" absolute z-10 top-2 right-3 bg-slate-100 shadow-xl p-1.5 rounded-full flex items-center justify-center cursor-pointer">
                 <Heart
                   onClick={(e) => {
                     e.stopPropagation();
@@ -94,25 +143,26 @@ const Card = ({ car, buy = true }) => {
                   className={`hover:text-red-300  text-black`}
                   fill="white"
                 />
-              )
-            ) : (
-              ""
-            )}
+              </div>
+            )
+          ) : (
+            ""
+          ))}
+        <div className=" flex items-center justify-center relative overflow-hidden">
+          <div className="w-full h-48 rounded-md overflow-hidden">
+            <img
+              src={car?.image?.main?.url || Car_img}
+              alt="car image"
+              className="aspect-auto w-full h-full object-cover object-center hover:scale-125 transition-all duration-300 "
+            />
           </div>
-        )}
-        <div className=" flex items-center justify-center relative">
-          <img
-            src={car?.image?.main?.url || Car_img}
-            alt="car image"
-            className="aspect-auto w-full h-full "
-          />
           {car?.sold && (
-            <div className="w-full h-full absolute bg-[rgba(100,0,0,.3)] flex items-center justify-center text-white text-lg">
-              SOLD
+            <div className=" absolute top-[15px] left-[-20px] bg-red-400 z-20 px-7 -rotate-45 font-semibold text-[12px] ">
+              Bought
             </div>
           )}
         </div>
-        <h1 className=" text-lg font-semibold text-black mt-2">
+        <h1 className=" text-lg font-semibold text-black mt-2 line-clamp-[1]">
           {car?.name} {car?.model}
         </h1>
         <p className=" text-sm font-semibold mt-1 -ml-1">
@@ -142,7 +192,7 @@ const Card = ({ car, buy = true }) => {
           ].map((info, index) => (
             <div key={index} className=" flex items-center gap-2 mb-3">
               <img src={info.icon} alt="" />
-              <span className=" text-sm font-normal text-[#959595] text-nowrap">
+              <span className="text-xs lg:text-sm font-normal text-[#959595] text-nowrap">
                 {info.content}
               </span>
             </div>

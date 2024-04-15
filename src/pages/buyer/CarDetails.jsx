@@ -1,10 +1,4 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  CircleUser,
-  Heart,
-  LoaderCircle,
-} from "lucide-react";
+import { Heart, LoaderCircle } from "lucide-react";
 import Car_img from "/assets/image/car_img1.png";
 import User_icon from "/assets/icon/user_icon.svg";
 import Type_icon from "/assets/icon/type_icon.svg";
@@ -14,11 +8,9 @@ import Card from "../../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rating } from "@mui/material";
-import AddReview from "../../components/AddReview";
 import {
   asyncAddWatchList,
-  asyncDeleteReview,
+  // asyncDeleteReview,
   asyncDeleteWatchList,
   asyncMakePayment,
   asyncVerifyPayment,
@@ -26,6 +18,7 @@ import {
 import {
   notifyError,
   notifyErrorPromise,
+  // notifyErrorPromise,
   notifyInfo,
   notifyPendingPromise,
   notifySuccess,
@@ -34,6 +27,8 @@ import {
 import { getSocket } from "../../utils/Socket";
 import { addChat, updateSelectedChat } from "../../store/reducers/appReducer";
 import useRazorpay from "react-razorpay";
+import RatingAndReview from "../../components/RatingAndReview";
+import Rating from "@mui/material/Rating";
 
 const CarDetail = () => {
   const [Razorpay] = useRazorpay();
@@ -41,6 +36,14 @@ const CarDetail = () => {
   const dispatch = useDispatch();
   const { user, selectedCar, userType, isAuthenticated, allCars, watchList } =
     useSelector((state) => state.app);
+
+  const [id, setId] = useState(null);
+  const [msg, setMsg] = useState(null);
+
+  useEffect(() => {
+    if (id && msg.includes("successfully")) notifySuccessPromise(id, msg);
+    else if (id && msg) notifyErrorPromise(id, msg);
+  }, [id, msg]);
 
   var socket = useRef(null);
 
@@ -50,11 +53,12 @@ const CarDetail = () => {
     socket.current?.on("chat-created", (res) => {
       console.log(res);
       if (res.status == 200 || res.status == 201) {
+        setMsg("Chat created successfully");
         dispatch(addChat(res.chat));
         dispatch(updateSelectedChat(res.chat));
       } else {
         console.log(res);
-        notifyError(res.message);
+        setMsg(res.message);
       }
     });
   }, []);
@@ -67,16 +71,6 @@ const CarDetail = () => {
     selectedCar?.image?.secondary?.url || Car_img,
     selectedCar?.image?.tertiary?.url || Car_img,
   ];
-
-  const handleLeft = () => {
-    if (activeImage == 0) setActiveImage(2);
-    else setActiveImage(activeImage - 1);
-  };
-
-  const handleRight = () => {
-    if (activeImage == 2) setActiveImage(0);
-    else setActiveImage(activeImage + 1);
-  };
 
   const handleBargain = (e) => {
     e.stopPropagation();
@@ -91,14 +85,16 @@ const CarDetail = () => {
       chat_name_buyer: `${selectedCar.name}(${selectedCar.model})`,
       chat_name_dealer: user.user_name,
     };
+
     const index = user.chat.findIndex(
-      (chat) => chat?.car_id?._id == selectedCar?._id
+      (chat) => chat.car_id?._id == selectedCar?._id
     );
 
-    console.log({ index });
-
     if (index == -1) {
-      return socket.emit("create-chat", data);
+      const id = notifyPendingPromise("Creating Chat...");
+      setId(id);
+
+      return getSocket().emit("create-chat", data);
     }
     dispatch(updateSelectedChat(user.chat[index]));
   };
@@ -123,12 +119,9 @@ const CarDetail = () => {
       image: selectedCar?.image?.main?.url,
       order_id: res.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
-        const id = notifyPendingPromise("Redirecting...");
         dispatch(asyncVerifyPayment(response, selectedCar?._id)).then((res) => {
-          if (res == 200) {
-            notifySuccessPromise(id, "Car bought successfully!");
-            navigate("/buyer/my-cars");
-          } else notifyError(res.message);
+          if (res == 200) navigate("/buyer/my-cars");
+          else notifyError(res.message);
         });
         console.log({ response });
       },
@@ -174,7 +167,9 @@ const CarDetail = () => {
   }, [selectedCar]);
 
   const [buyPrice, setBuyPrice] = useState("");
+
   useEffect(() => {
+    console.log({ buyPrice });
     let buyIndex = selectedCar?.bargained?.findIndex(
       (bargain) => bargain.id === user?._id
     );
@@ -190,59 +185,59 @@ const CarDetail = () => {
   return (
     <>
       {selectedCar ? (
-        <div id="container" className=" container">
-          <div className="overflow-hidden mt-8">
+        <div id="container" className=" container px-4 md:px-0">
+          <div className="overflow-hidden md:mt-8">
             <div className="mb-9">
-              <div className=" grid grid-cols-2 items-start gap-2">
-                <div className="items-center justify-center h-full overflow-hidden md:mb-8 lg:mb-0 xl:flex">
-                  <div className="w-full gap-2 xl:flex xl:flex-row-reverse">
-                    <div className=" relative">
-                      <div className="relative flex items-center justify-center">
+              <div className=" md:grid md:grid-cols-2 flex flex-col items-start gap-2">
+                <div className="">
+                  <div className="w-full flex flex-col md:flex-row gap-4">
+                    <h2 className="md:text-[32px] md:hidden block text-xl font-semibold">
+                      {selectedCar.name}({selectedCar.model})
+                    </h2>
+                    <div className="relative mb-2.5 overflow-hidden rounded-md border w-full md:min-h-[50vh]">
+                      {/* <div className=" absolute top-[20px] left-[-25px] bg-red-400 z-20 px-10 -rotate-45 font-semibold text-base ">
+                        Sold
+                      </div> */}
+                      <div className="relative flex items-center justify-center w-full h-full">
                         <img
-                          alt="active image"
+                          alt="Product gallery 1"
                           src={images[activeImage]}
-                          width={650}
-                          height={590}
-                          className="rounded-lg object-cover"
-                        />
-                      </div>
-                      <div className="absolute top-2/4 z-10 flex w-full items-center justify-between">
-                        <ChevronLeft
-                          onClick={handleLeft}
-                          className="text-white bg-[rgba(0,0,0,.5)] hover:bg-[rgba(0,0,0,.7)] rounded-full transition-all cursor-pointer "
-                        />
-                        <ChevronRight
-                          onClick={handleRight}
-                          className="text-white transition-all cursor-pointer rounded-full bg-[rgba(0,0,0,.5)] hover:bg-[rgba(0,0,0,.7)]"
+                          // width={650}
+                          // height={590}
+                          className="rounded-lg object-cover h-full w-full"
                         />
                       </div>
                     </div>
-                    <div className=" flex flex-col gap-4">
+                    <div className="flex md:flex-col gap-2">
                       {images.map((image, index) => (
-                        <div
-                          key={image}
-                          className={`  flex cursor-pointer items-center  justify-center overflow-hidden rounded border-4 transition hover:opacity-75 ${
-                            activeImage == index && "border-red-500"
-                          }`}
-                        >
-                          <img
-                            alt={`Product ${index}`}
-                            onClick={() => setActiveImage(index)}
-                            src={image}
-                            decoding="async"
-                            loading="lazy"
-                            className=" h-full w-28 object-cover aspect-square rounded"
-                          />
+                        <div key={index} className=" relative overflow-hidden">
+                          {/* <div className=" absolute top-[10px] left-[-15px] bg-red-400 z-20 px-5 -rotate-45 font-semibold text-[8px] ">
+                            sold
+                          </div> */}
+                          <div
+                            onMouseEnter={() => setActiveImage(index)}
+                            key={index}
+                            className="flex cursor-pointer items-center justify-center overflow-hidden rounded transition hover:opacity-75 "
+                          >
+                            <img
+                              alt={`Product ${index}`}
+                              src={image}
+                              // width={100}
+                              // height={100}
+                              className="h-20 w-20 object-cover md:h-24 md:w-24 lg:h-28 lg:w-28 xl:w-32"
+                            />
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-                <div className="flex shrink-0 flex-col bg-white h-full rounded-xl px-6 pr-10">
+
+                <div className="flex shrink-0 w-full flex-col bg-white h-full rounded-xl px-2 lg:px-6 lg:pr-10">
                   <div className="flex items-start justify-between ">
                     <div className="pb-3">
-                      <h2 className="text-[32px] font-semibold">
-                        {selectedCar.name} {selectedCar.model}
+                      <h2 className="md:text-[32px] hidden md:block text-3xl font-semibold">
+                        {selectedCar.name}({selectedCar.model})
                       </h2>
                       <p className="mt-1 text-sm font-normal flex items-center gap-2">
                         <Rating
@@ -257,11 +252,12 @@ const CarDetail = () => {
                           {selectedCar?.review?.length || 0} Reviewer
                         </span>
                       </p>
+
                       <p className="mt-1 text-[#596780] text-sm font-normal capitalize">
                         Dealer : {selectedCar?.dealer_id.user_name}
                       </p>
                     </div>
-                    <div className="p-2 bg-white shadow-md cursor-pointer rounded-full">
+                    <div className="md:p-2 md:bg-white md:shadow-md cursor-pointer rounded-full mt-2 md:mt-0">
                       {!watchList?.includes(selectedCar?._id) ? (
                         <Heart
                           fill="#fff"
@@ -269,7 +265,7 @@ const CarDetail = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!isAuthenticated) {
-                              notifyInfo("Login to perfrom actions!");
+                              notifyInfo("Login to perform actions!");
                               return navigate("/sign-in");
                             }
                             dispatch(asyncAddWatchList(selectedCar?._id)).then(
@@ -300,12 +296,12 @@ const CarDetail = () => {
                       )}
                     </div>
                   </div>
-                  <p className=" text-base text-[#596780] font-normal w-[70%] leading-7">
+                  <p className=" text-base text-[#596780] font-normal w-[90%] leading-7">
                     {selectedCar.description
                       ? selectedCar.description
                       : "No description!"}
                   </p>
-                  <div className=" grid grid-cols-2 w-1/2 gap-x-10 pb-2 mt-2">
+                  <div className=" grid grid-cols-2 md:w-1/2 gap-x-10 pb-2 mt-2">
                     {[
                       {
                         icon: User_icon,
@@ -335,7 +331,7 @@ const CarDetail = () => {
                       </div>
                     ))}
                   </div>
-                  <div className=" flex items-center justify-between">
+                  <div className=" flex items-center  justify-between">
                     {!selectedCar?.sold && (
                       <div className="  mt-2 flex flex-col">
                         {index != -1 &&
@@ -360,24 +356,24 @@ const CarDetail = () => {
                     )}
 
                     {selectedCar?.buyer_id != user?._id ? (
-                      <div className="flex gap-2">
+                      <div className="flex flex-row gap-2">
                         {" "}
                         <button
                           onClick={handleBargain}
-                          className="border border-black text-black w-fit px-10 py-2 transition-all hover:text-white hover:bg-black  rounded-lg mt-3"
+                          className="border border-black text-black w-fit px-3 py-1  lg:px-10 lg:py-2 transition-all hover:text-white hover:bg-black  rounded-lg mt-3"
                         >
                           Bargain
                         </button>
                         <button
                           onClick={handleBuyNow}
-                          className="bg-[#1572D3] hover:bg-blue-500 transition-all w-fit px-10 py-2 text-white rounded-lg mt-3"
+                          className="bg-[#1572D3] hover:bg-blue-500 transition-all w-fit px-3 py-1  lg:px-10 lg:py-2 text-white rounded-lg mt-3"
                         >
                           Buy Now
                         </button>
                       </div>
                     ) : (
                       <p className="text-gray-700 text-lg mt-5">
-                        Bought At : ₹ {buyPrice?.toLocaleString("en-IN")}
+                        {/* Bought At : ₹ {buyPrice?.toLocaleString("en-IN")} */}
                       </p>
                     )}
                   </div>
@@ -386,7 +382,9 @@ const CarDetail = () => {
             </div>
           </div>
 
-          {/* REVIEW */}
+          <RatingAndReview />
+
+          {/* REVIEW
           <div
             id="car-container"
             className="w-[90%]  max-h-[40vh] overflow-y-auto mx-auto mb-20 border bg-gray-100 text-gray-700 font-semibold text-lg rounded-lg p-3 pt-0"
@@ -448,15 +446,15 @@ const CarDetail = () => {
             )}
           </div>
 
-          {/*Add REVIEW */}
-          <AddReview />
+          Add REVIEW
+          <AddReview /> */}
 
           {/* Recent Cars */}
-          <div className=" container mt-20 mb-10">
+          <div className=" container md:px-8 mt-0 mb-10">
             <div className=" flex items-center justify-between">
-              <h1 className=" text-xl font-medium text-black">
+              <h4 className="md:text-[30px] text-2xl text-gray-800 mb-3 font-semibold capitalize pb-2">
                 {userType != "Dealer" ? "Recent Car" : "My Cars"}
-              </h1>
+              </h4>
               <h1
                 onClick={() => {
                   navigate("/cars");
@@ -466,7 +464,7 @@ const CarDetail = () => {
                 View All
               </h1>
             </div>
-            <div className="grid grid-cols-4 gap-7 mt-4">
+            <div className="grid md:grid-cols-4 gap-7 mt-4">
               {
                 // (userType !== "Dealer"
                 //   ? allCars.slice(0, 5)

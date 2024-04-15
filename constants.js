@@ -11,14 +11,7 @@ export const NavItems = [
   //     title: "How it work",
   //     path: "#how-it-work",
   //   },
-  {
-    title: "Why choose us",
-    path: "#why-you-choose",
-  },
-  {
-    title: "Testimonials",
-    path: "#testimonials",
-  },
+  
 ];
 
 export const CarTypes = ["Sport", "Suv", "MPV", "Sedan", "Coupe", "Hatchback"];

@@ -78,7 +78,7 @@ export const appReducer = createSlice({
       state.selectedCar.rating = action.payload.car_rating || 0;
     },
     addMessage: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       const index = state.user.chat.findIndex(
         (chat) => chat._id == action.payload.chat_id
       );
@@ -105,8 +105,18 @@ export const appReducer = createSlice({
       }
     },
     addChat: (state, action) => {
-      state.user.chat.unshift(action.payload);
+      const chatToAdd = action.payload;
+      // Check if the chat already exists
+      const chatExists = state.user.chat.some(
+        (chat) => chat._id === chatToAdd._id
+      );
+
+      // If the chat doesn't exist, add it to the beginning of the chat list
+      if (!chatExists) {
+        state.user.chat.unshift(chatToAdd);
+      }
     },
+
     updateSelectedChat: (state, action) => {
       state.selectedChat = action.payload;
 
@@ -135,7 +145,17 @@ export const appReducer = createSlice({
       if (state.selectedChat?._id == action.payload.chat_id)
         if (!state.selectedChat.messages.length) {
           state.selectedChat.messages = [action.payload];
-        } else state.selectedChat.messages.push(action.payload);
+        } else {
+          const newMessage = action.payload;
+          return {
+            ...state,
+            selectedChat: {
+              ...state.selectedChat,
+              messages: [...state.selectedChat.messages, newMessage],
+            },
+          };
+        }
+      //  state.selectedChat.messages.push(action.payload);
       else {
         if (!state.unreadChat) {
           state.unreadChat = [];
@@ -148,12 +168,13 @@ export const appReducer = createSlice({
       const index = state.user.chat.findIndex(
         (chat) => chat._id == action.payload.chat_id
       );
-      console.log(index);
+      // console.log(index);
       if (index != -1) {
         state.user.chat[index].last_message = action.payload.message;
         state.user.chat[index].messages.push(action.payload);
-        state.user.chat.unshift(state.user.chat[index]);
+        const chat = state.user.chat[index];
         state.user.chat.splice(index, 1);
+        state.user.chat.unshift(chat);
       }
     },
     receiveBargain: (state, action) => {
@@ -175,7 +196,11 @@ export const appReducer = createSlice({
       );
       console.log(index);
       if (index != -1) {
+        state.user.chat[index].last_bargain = action.payload.message;
         state.user.chat[index].bargain.push(action.payload);
+        const chat = state.user.chat[index];
+        state.user.chat.splice(index, 1);
+        state.user.chat.unshift(chat);
       }
     },
     sellCar: (state, action) => {
@@ -188,46 +213,13 @@ export const appReducer = createSlice({
     updateMyDeals: (state, action) => {
       state.myDeals = action.payload;
     },
-    // rejectPrice: (state, action) => {
-    //   const index = state.user.chat.findIndex(
-    //     (chat) => chat._id == action.payload.chat_id
-    //   );
 
-    //   console.log({
-    //     index,
-    //     selectedChat: state.selectedChat,
-    //     chat: state.user.chat[index],
-    //   });
-
-    //   if (index != -1) {
-    //     state.user.chat[index].last_bargain.status = "Rejected";
-    //     state.selectedChat &&
-    //       (state.selectedChat.last_bargain.status = "Rejected");
-
-    //     const bargainIndex = state.user.chat[index].bargain.findIndex(
-    //       (bargain) => bargain._id == action.payload._id
-    //     );
-
-    //     console.log({ bargainIndex });
-
-    //     if (bargainIndex != -1) {
-    //       console.log({
-    //         userChat: state.user.chat[index].bargain[index],
-    //         selectedChat: state.selectedChat.bargain[index],
-    //       });
-
-    //       state.user.chat[index].bargain[index].price.status = "Rejected";
-    //       state.selectedChat &&
-    //         (state.selectedChat.bargain[index].price.status = "Rejected");
-    //     }
-    //   }
-    // },
     rejectPrice: (state, action) => {
       return produce(state, (draftState) => {
         const index = draftState.user.chat.findIndex(
           (chat) => chat._id === action.payload.chat_id
         );
-
+        console.log({ index });
         if (index !== -1) {
           if (!draftState.user.chat[index].last_bargain) {
             draftState.user.chat[index].last_bargain = { status: "Rejected" };
@@ -236,7 +228,11 @@ export const appReducer = createSlice({
           } else {
             draftState.user.chat[index].last_bargain.status = "Rejected";
             if (draftState.selectedChat) {
-              draftState.selectedChat.last_bargain.status = "Rejected";
+              console.log(draftState.selectedChat);
+              if (draftState.selectedChat.last_bargain)
+                draftState.selectedChat.last_bargain.status = "Rejected";
+              else
+                draftState.selectedChat.last_bargain = { status: "Rejected" };
             }
           }
 
@@ -262,9 +258,14 @@ export const appReducer = createSlice({
         );
 
         if (index !== -1) {
-          draftState.user.chat[index].last_bargain.status = "Accepted";
+          if (draftState.user.chat[index].last_bargain)
+            draftState.user.chat[index].last_bargain.status = "Accepted";
+          else
+            draftState.user.chat[index].last_bargain = { status: "Accepted" };
           if (draftState.selectedChat) {
-            draftState.selectedChat.last_bargain.status = "Accepted";
+            if (draftState.selectedChat.last_bargain)
+              draftState.selectedChat.last_bargain.status = "Accepted";
+            else draftState.selectedChat.last_bargain = { status: "Accepted" };
           }
 
           const bargainIndex = draftState.user.chat[index].bargain.findIndex(

@@ -13,7 +13,7 @@ const Header = ({ heading }) => {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-[28px] font-medium text-[#2B3674] capitalize">
+        <h1 className="text-xl lg:text-[28px] font-medium text-[#2B3674] capitalize">
           Welcome Back, {user?.user_name}
         </h1>
       </div>

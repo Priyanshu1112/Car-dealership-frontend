@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:3001/",
   // baseURL: "https://car-dealership-backend.vercel.app/",
   // baseURL: "https://car-dealership-backend.onrender.com/",
+  // baseURL: "https://car-dealership-backend-production.up.railway.app/",
 });
 
 axiosInstance.interceptors.request.use(
