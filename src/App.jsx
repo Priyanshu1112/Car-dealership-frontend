@@ -36,7 +36,7 @@ import WatchList from "./pages/buyer/WatchList";
 import IsAuthenticated from "./middleware/IsAuthenticated";
 import { asyncGetAllCars } from "./store/actions/carActions";
 import MyCars from "./pages/buyer/MyCars";
-import ScrollToTop from "./utils/ScrollToTop";
+import { useLocation } from "react-router-dom";
 // import CarDetailDealer from "./pages/dealer/CarDetailDealer";
 // import Wishlist from "./pages/Wishlist";
 
@@ -133,9 +133,16 @@ const App = () => {
     }
   }, [userType]);
 
+  const { pathname } = useLocation();
+
+  // Automatically scrolls to top whenever pathname changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <>
-    <ScrollToTop/>
+      {/* <ScrollToTop /> */}
       <div>
         {userType == "Dealer" ? "" : <Navbar />}
         <Routes>
