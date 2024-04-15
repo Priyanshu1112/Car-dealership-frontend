@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 var socket;
 // https://car-dealership-backend.onrender.com/
 export const initializeConnection = (user) => {
-  socket = io("http://localhost:3001/", {
+  socket = io("https://car-dealership-backend-production.up.railway.app/", {
     autoConnect: false,
   });
   socket.auth = { id: user._id, name: user.user_name };
