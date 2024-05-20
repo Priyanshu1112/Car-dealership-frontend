@@ -41,17 +41,8 @@ const CarDetail = () => {
 
   const [id, setId] = useState(null);
   const [msg, setMsg] = useState(null);
-  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    console.log({ isTouch });
-  }, [isTouch]);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsTouch(true);
-    } else setIsTouch(false);
-
     if (id && msg?.includes("successfully")) notifySuccessPromise(id, msg);
     else if (id && msg) notifyErrorPromise(id, msg);
   }, [id, msg]);
@@ -167,7 +158,8 @@ const CarDetail = () => {
     // };
 
     const scrollToTop = () => {
-      if (isTouch) return window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
+      return;
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
       const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
