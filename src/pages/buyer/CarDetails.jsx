@@ -30,6 +30,7 @@ import useRazorpay from "react-razorpay";
 import RatingAndReview from "../../components/RatingAndReview";
 import Ribbon from "../../components/Ribbon";
 import Rating from "@mui/material/Rating";
+import { useMediaQuery } from "@mui/material";
 
 const CarDetail = () => {
   const [Razorpay] = useRazorpay();
@@ -40,8 +41,17 @@ const CarDetail = () => {
 
   const [id, setId] = useState(null);
   const [msg, setMsg] = useState(null);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    console.log({ isTouch });
+  }, [isTouch]);
+
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setIsTouch(true);
+    } else setIsTouch(false);
+
     if (id && msg?.includes("successfully")) notifySuccessPromise(id, msg);
     else if (id && msg) notifyErrorPromise(id, msg);
   }, [id, msg]);
@@ -157,8 +167,7 @@ const CarDetail = () => {
     // };
 
     const scrollToTop = () => {
-      window.scrollTo(0, 0);
-      return;
+      if (isTouch) return window.scrollTo(0, 0);
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
       const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
