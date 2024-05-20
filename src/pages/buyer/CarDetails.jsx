@@ -145,11 +145,22 @@ const CarDetail = () => {
   };
 
   useEffect(() => {
+    // const scrollToTop = () => {
+    //   const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
+    //   const scrollInterval = setInterval(() => {
+    //     if (window.scrollY !== 0) {
+    //       window.scrollBy(0, scrollStep);
+    //     } else {
+    //       clearInterval(scrollInterval);
+    //     }
+    //   }, 15); // scroll every 15 milliseconds
+    // };
+
     const scrollToTop = () => {
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
       const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
-          window.scrollBy(0, scrollStep);
+          window.scrollTo(0, window.scrollY + scrollStep);
         } else {
           clearInterval(scrollInterval);
         }
