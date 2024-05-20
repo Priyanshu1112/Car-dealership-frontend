@@ -157,6 +157,8 @@ const CarDetail = () => {
     // };
 
     const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      return;
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
       const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
