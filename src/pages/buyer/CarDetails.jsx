@@ -124,8 +124,14 @@ const CarDetail = () => {
       order_id: res.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
         dispatch(asyncVerifyPayment(response, selectedCar?._id)).then((res) => {
-          if (res == 200) navigate("/buyer/my-cars");
-          else notifyError(res.message);
+          const id = notifyPendingPromise("Verifying...");
+          if (res == 200) {
+            notifySuccessPromise(id, "Verified successfully!");
+            navigate("/buyer/my-cars");
+          } else {
+            notifyErrorPromise(id, "Failed to verify!");
+            notifyError(res.message);
+          }
         });
         console.log({ response });
       },
@@ -177,8 +183,8 @@ const CarDetail = () => {
   // };
   useEffect(() => {
     const scrollToTop = () => {
-      // window.scrollTo(0, 0);
-      // return;
+      window.scrollTo(0, 0);
+      return;
       const scrollStep = -window.scrollY / (500 / 30); // adjust duration as needed
       const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
