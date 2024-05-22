@@ -9,15 +9,19 @@ import AddCar from "./AddCar";
 import EditCar from "./EditCar";
 import CarDetail from "./CarDetailDealer";
 import { useMediaQuery } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { asyncLogOut } from "../../store/actions/appActions";
 
 const Dealer = () => {
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery("(min-width:768px)");
 
   return (
     <>
       {!isMobile ? (
-        <div className="absolute top-0 left-0 h-screen text-center px-2 w-screen z-[100] bg-white flex justify-center items-center">
-          Dealer Screen is better on screens &gt; 768px
+        <div className="absolute top-0 flex-col left-0 h-screen text-center px-2 w-screen z-[100] bg-white flex justify-center items-center">
+          <p>Dealer Screen is better on screens &gt; 768px</p>
+          <button onClick={() => dispatch(asyncLogOut())} className="mt-5 bg-red-300 px-4 py-1 rounded-md">LogOut</button>
         </div>
       ) : (
         <DashboardLayout>
