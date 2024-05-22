@@ -153,34 +153,7 @@ const CarDetail = () => {
     notifySuccessPromise(id, "Opened successfully!");
   };
 
-  // const handleBuyNow = async () => {
-  //   const stripe = await loadStripe(
-  //     "pk_test_51P0guASGxX8OUMi0XPpdGUXrB1yF5bsf4aPohA6LWqYXmH0wPjAUXLfd0DkTnXx6e5ODIWaJ2eC8G0fcXeYoDSIz00L9CK7fUS"
-  //   );
-
-  //   const body = {
-  //     products: selectedCar,
-  //   };
-
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-
-  //   const response = await axiosInstance.post(
-  //     "/make-payment",
-  //     body,
-  //     {
-  //       headers: headers,
-  //     }
-  //   );
-
-  //   const session = response.data;
-
-  //   const result = stripe.redirectToCheckout({
-  //     sessionId: session.id,
-  //   });
-
-  // };
+ 
   useEffect(() => {
     const scrollToTop = () => {
       window.scrollTo(0, 0);
